@@ -3,7 +3,7 @@ Overview
 
 # Development Environment
 * Python 3.10
-* Arcade
+* Arcade 2.6.10
 
 # Contributors
 * Ryan Taniguchi - ryan.taniguchi@protonmail.com
