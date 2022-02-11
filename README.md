@@ -8,7 +8,7 @@ Overview
 # Contributors
 * Ryan Taniguchi - ryan.taniguchi@protonmail.com
 * Avery Crowson
-* Jeffrey Chumley
+* Jeffrey Chumley - chumleyj@gmail.com
 * Brad Howard - howardbrad33@gmail.com
 
 # Useful Websites and Resources
