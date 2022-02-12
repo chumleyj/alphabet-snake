@@ -2,7 +2,6 @@ import arcade
 from random import randrange
 import snake
 
-"""Ryan 2 - Sets total number of food items"""
 FOOD_COUNT = 10
 
 SCREEN_WIDTH = 1280
@@ -12,18 +11,14 @@ SCREEN_TITLE = 'Alphabet Snake'
 # Class for food items
 class TestFood():
     def __init__(self):
-        """RYAN 2 - Creates a Sprite list for all the food items"""
         self.food_list = None
 
-    """"RYAN 2 - Creates number of food set to FOOD_COUNT at random locations"""
     def setup(self):
         self.food_list = arcade.SpriteList()
 
     def draw(self):
-        """Ryan2 - draws the food items"""
         self.food_list.draw()
 
-"""RYAN2 - Good food child class for food that the user wants to consume"""
 class GoodFood(TestFood):
     def setup(self):
         super().setup()
@@ -37,7 +32,6 @@ class GoodFood(TestFood):
         # Add the food to the lists
         self.food_list.append(food)
 
-"""RYAN2 - Bad food child class for food that the user doesn't want to consume"""
 class BadFood(TestFood):
     def setup(self):
         super().setup()
@@ -61,6 +55,13 @@ class TestGame(arcade.Window):
         self.snake = None
         self.goodfood = None
         self.badfood = None
+        """Ryan - Initialize sounds"""
+        self.init_sounds()
+
+    
+    def init_sounds(self):
+        self.yum = arcade.load_sound("sounds/yum.mp3")
+        self.yuck = arcade.load_sound("sounds/yuck.mp3")
 
     # sets up the game variables
     def setup(self):
@@ -70,7 +71,6 @@ class TestGame(arcade.Window):
         self.badfood = BadFood()
         #self.background = arcade.load_texture("bg.jpg")
         self.center_window()
-        """Ryan 2 - calls on food.setup method"""
         self.goodfood.setup()
         self.badfood.setup()
 
@@ -92,7 +92,6 @@ class TestGame(arcade.Window):
     def on_update(self, delta_time):
         self.snake.update()
 
-        """Ryan 2 - Created two collission conditions, one for good food and one for bad"""        
         """Jeff - updated collision handling"""
         for seg in self.snake.snake_list:
             goodfood_collision = arcade.check_for_collision_with_list(seg, self.goodfood.food_list)
@@ -104,16 +103,17 @@ class TestGame(arcade.Window):
             if badfood_collision:
                 break
 
-        """Ryan2 - Gives a point and resets the food items if good food is consumed"""
         for self.goodfood.food in goodfood_collision:
             self.score += 1
-            """Ryan 2 - Changes food everytime one is collided"""
+            """Ryan - added sound effect"""
+            arcade.play_sound(self.yum)
             self.goodfood.setup()
             self.badfood.setup()
             self.snake.grow()
 
-        """Ryan2 - Removes bad food that is consumed, but not points"""
         for self.badfood.food in badfood_collision:
+            """Ryan - added sound effect"""
+            arcade.play_sound(self.yuck)
             self.badfood.food.remove_from_sprite_lists()
 
 
