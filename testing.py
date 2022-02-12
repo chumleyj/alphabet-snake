@@ -1,13 +1,13 @@
-from fileinput import filename
 import arcade
 from random import randrange
+import snake
 
 """Ryan 2 - Sets total number of food items"""
 FOOD_COUNT = 10
 
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 800
-SCREEN_TITLE = 'First Arcade'
+SCREEN_TITLE = 'Alphabet Snake'
 
 # Class for food items
 class TestFood():
@@ -52,56 +52,22 @@ class BadFood(TestFood):
             # Add the food to the lists
             self.food_list.append(food)
 
-class TestSnake():
-    # create a list of points where the TestSnake is drawn and set its speed
-    def __init__(self, speed):
-        """self.snake_coords"""
-        self.segments = []
-        """Jeff - fill list with sprites to represent segments of the snake"""
-        for x in range(300, 350, 5):
-            new_segment = arcade.Sprite(filename='snake_segment.png', image_height=5, image_width=5, center_x=x, center_y=300)
-            self.segments.append(new_segment)
-
-        self.speed = speed
-        self.x_speed = speed
-        self.y_speed = 0
-    
-    # update the position of the TestSnake
-    def update(self):
-        
-        """Jeff - add new segment and remove last segment to update snake position"""
-        # add a new segment at the head of the TestSnake and remove the tail
-        new_segment = arcade.Sprite(filename='snake_segment.png', image_height=5, image_width=5, center_x=(self.segments[-1].center_x + self.x_speed), center_y=(self.segments[-1].center_y + self.y_speed))
-        self.segments.append(new_segment) # add to end
-        self.segments.pop(0) # remove first element (tail)
-
-        # check if reached edge of screen and force to turn around
-        if self.segments[-1].center_x >= SCREEN_WIDTH or self.segments[-1].center_x <= 0:
-            self.x_speed *= -1
-        if self.segments[-1].center_y >= SCREEN_HEIGHT or self.segments[-1].center_y <= 0:
-            self.y_speed *= -1
-
-    # draw the list of points that make up the TestSnake
-    def draw(self):
-        """Jeff - updated drawing for sprites"""
-        for seg in self.segments:
-            seg.draw()
-
-
-
 class TestGame(arcade.Window):
     def __init__(self, width, height, title):
         # call Window class initializer
         super().__init__(width, height, title, resizable=False)
         self.background = None
         self.score = 0
-        self.snake = TestSnake(4)
-        self.goodfood = GoodFood()
-        self.badfood = BadFood()
+        self.snake = None
+        self.goodfood = None
+        self.badfood = None
 
     # sets up the game variables
     def setup(self):
         
+        self.snake = snake.Snake(100, 100, 5)
+        self.goodfood = GoodFood()
+        self.badfood = BadFood()
         #self.background = arcade.load_texture("bg.jpg")
         self.center_window()
         """Ryan 2 - calls on food.setup method"""
@@ -128,12 +94,12 @@ class TestGame(arcade.Window):
 
         """Ryan 2 - Created two collission conditions, one for good food and one for bad"""        
         """Jeff - updated collision handling"""
-        for seg in self.snake.segments:
+        for seg in self.snake.snake_list:
             goodfood_collision = arcade.check_for_collision_with_list(seg, self.goodfood.food_list)
             if goodfood_collision:
                 break
 
-        for seg in self.snake.segments:
+        for seg in self.snake.snake_list:
             badfood_collision = arcade.check_for_collision_with_list(seg, self.badfood.food_list)
             if badfood_collision:
                 break
@@ -144,6 +110,7 @@ class TestGame(arcade.Window):
             """Ryan 2 - Changes food everytime one is collided"""
             self.goodfood.setup()
             self.badfood.setup()
+            self.snake.grow()
 
         """Ryan2 - Removes bad food that is consumed, but not points"""
         for self.badfood.food in badfood_collision:
@@ -173,6 +140,7 @@ class TestGame(arcade.Window):
 def main():
     my_game = TestGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     my_game.setup()
+    my_game.set_update_rate(1/20)
     arcade.run()
 
 if __name__ == '__main__':
