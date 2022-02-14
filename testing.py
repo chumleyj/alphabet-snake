@@ -62,6 +62,8 @@ class TestGame(arcade.Window):
     def init_sounds(self):
         self.yum = arcade.load_sound("sounds/yum.mp3")
         self.yuck = arcade.load_sound("sounds/yuck.mp3")
+        self.bg_music = arcade.load_sound("sounds/bg_music.mp3")
+        self.bg_music.play(loop=True)
 
     # sets up the game variables
     def setup(self):
