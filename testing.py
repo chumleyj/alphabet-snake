@@ -1,6 +1,8 @@
 import arcade
 from random import randrange
 import snake
+# Ryan
+from time import sleep
 
 FOOD_COUNT = 10
 
@@ -105,6 +107,9 @@ class TestGame(arcade.Window):
             if badfood_collision:
                 break
 
+        # Ryan - added snake collision with self
+        snake_collision = arcade.check_for_collision_with_list(self.snake.snake_head, self.snake.snake_list)
+               
         for self.goodfood.food in goodfood_collision:
             self.score += 1
             """Ryan - added sound effect"""
@@ -118,6 +123,11 @@ class TestGame(arcade.Window):
             arcade.play_sound(self.yuck)
             self.badfood.food.remove_from_sprite_lists()
 
+        # Ryan - Added snake collision with self shutting down game
+        for seg in snake_collision:
+            arcade.play_sound(self.yuck)
+            sleep(1)
+            quit()
 
     # handle key press
     def on_key_press(self, symbol, modifiers):
