@@ -27,8 +27,9 @@ class Snake():
                                 arcade.load_texture('snake_head_vert.png', flipped_vertically=True, width=self.speed, height=self.speed)
         ]
 
+        # Ryan - instantiated snake_head
         # create sprite for snake head and add to snake_list
-        snake_head = arcade.Sprite(image_height=self.speed,
+        self.snake_head = arcade.Sprite(image_height=self.speed,
                                    image_width=self.speed,
                                    center_x=x_start,
                                    center_y=y_start,
@@ -36,9 +37,12 @@ class Snake():
         )
         # add textures to snake_head
         for texture in self.head_directions:
-            snake_head.append_texture(texture)
-        snake_head.set_texture(0)
-        self.snake_list.append(snake_head)
+            # Ryan - instantiated snake_head
+            self.snake_head.append_texture(texture)
+        # Ryan - instantiated snake_head
+        self.snake_head.set_texture(0)
+        # Ryan - instantiated snake_head
+        self.snake_list.append(self.snake_head)
         x_start -= self.speed
 
         # create sprites for snake body segments and add to snake_list
