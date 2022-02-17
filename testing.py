@@ -73,7 +73,7 @@ class TestGame(arcade.Window):
         self.snake = snake.Snake(100, 100, 5)
         self.goodfood = GoodFood()
         self.badfood = BadFood()
-        #self.background = arcade.load_texture("bg.jpg")
+        self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
         self.center_window()
         self.goodfood.setup()
         self.badfood.setup()
@@ -84,7 +84,8 @@ class TestGame(arcade.Window):
         self.clear() 
 
         # draws the backgound and snake
-        #arcade.draw_lrwh_rectangle_textured(0, 0, self.width, self.height, self.background)
+        arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+        
         self.snake.draw()
         self.goodfood.draw()
         self.badfood.draw()
