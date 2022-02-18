@@ -1,5 +1,6 @@
 # Overview
 Overview 
+needs pip install mysql-connector-python
 
 # Development Environment
 * Python 3.10
