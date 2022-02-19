@@ -117,10 +117,10 @@ class TestGame(arcade.Window):
             arcade.play_sound(self.yum)
             self.goodfood.setup()
             self.badfood.setup()
-            self.snake.grow()
 
         for self.badfood.food in badfood_collision:
             """Ryan - added sound effect"""
+            self.snake.grow()
             arcade.play_sound(self.yuck)
             self.badfood.food.remove_from_sprite_lists()
 
