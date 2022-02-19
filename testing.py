@@ -132,16 +132,16 @@ class TestGame(arcade.Window):
 
     # handle key press
     def on_key_press(self, symbol, modifiers):
-        if (symbol == arcade.key.UP):
+        if (symbol == arcade.key.UP and self.snake.y_speed >= 0):
             self.snake.x_speed = 0
             self.snake.y_speed = self.snake.speed
-        elif (symbol == arcade.key.DOWN):
+        elif (symbol == arcade.key.DOWN and self.snake.y_speed <= 0):
             self.snake.x_speed = 0
             self.snake.y_speed = -self.snake.speed
-        elif (symbol == arcade.key.LEFT):
+        elif (symbol == arcade.key.LEFT and self.snake.x_speed <= 0):
             self.snake.x_speed = -self.snake.speed
             self.snake.y_speed = 0
-        elif (symbol == arcade.key.RIGHT):
+        elif (symbol == arcade.key.RIGHT and self.snake.x_speed >= 0):
             self.snake.x_speed = self.snake.speed
             self.snake.y_speed = 0
 
