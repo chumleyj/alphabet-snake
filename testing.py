@@ -27,9 +27,9 @@ class GoodFood(TestFood):
         # Create the food instance
         food = arcade.Sprite("good_food.png")
 
-        # Position the food
-        food.center_x = randrange(SCREEN_WIDTH)
-        food.center_y = randrange(SCREEN_HEIGHT)
+        # Position the good food
+        food.center_x = randrange(100, SCREEN_WIDTH - 100)
+        food.center_y = randrange(300, SCREEN_HEIGHT - 50)
 
         # Add the food to the lists
         self.food_list.append(food)
@@ -41,9 +41,9 @@ class BadFood(TestFood):
             # Create the food instance
             food = arcade.Sprite("food.png")
 
-            # Position the food
-            food.center_x = randrange(SCREEN_WIDTH)
-            food.center_y = randrange(SCREEN_HEIGHT)
+            # Position the bad food
+            food.center_x = randrange(100, SCREEN_WIDTH - 100)
+            food.center_y = randrange(300, SCREEN_HEIGHT - 50)
 
             # Add the food to the lists
             self.food_list.append(food)
