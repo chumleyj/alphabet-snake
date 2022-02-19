@@ -1,9 +1,9 @@
 import arcade
 from random import randrange
 import snake
-# Ryan
 from time import sleep
 
+# Defines the number of bad_food items
 FOOD_COUNT = 10
 
 SCREEN_WIDTH = 1280
@@ -57,7 +57,7 @@ class TestGame(arcade.Window):
         self.snake = None
         self.goodfood = None
         self.badfood = None
-        """Ryan - Initialize sounds"""
+        # Initializes sound and music
         self.init_sounds()
 
     
@@ -108,23 +108,23 @@ class TestGame(arcade.Window):
             if badfood_collision:
                 break
 
-        # Ryan - added snake collision with self
+        # Checks if the snake collides with itself
         snake_collision = arcade.check_for_collision_with_list(self.snake.snake_head, self.snake.snake_list)
-               
+
+        # If the snake eats good food, score increases, gives sound effect, and all food resets        
         for self.goodfood.food in goodfood_collision:
             self.score += 1
-            """Ryan - added sound effect"""
             arcade.play_sound(self.yum)
             self.goodfood.setup()
             self.badfood.setup()
 
+        # If the snake eats bad food, it grows, gives sound effect, and the food disappears
         for self.badfood.food in badfood_collision:
-            """Ryan - added sound effect"""
             self.snake.grow()
             arcade.play_sound(self.yuck)
             self.badfood.food.remove_from_sprite_lists()
 
-        # Ryan - Added snake collision with self shutting down game
+        # If snake collides with itself, the game quits
         for seg in snake_collision:
             arcade.play_sound(self.yuck)
             sleep(1)
