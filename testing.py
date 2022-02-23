@@ -70,7 +70,8 @@ class TestGame(arcade.Window):
     # sets up the game variables
     def setup(self):
         
-        self.snake = snake.Snake(100, 100, 5)
+        """Ryan 2/2/2022 - updated to new parameters"""
+        self.snake = snake.Snake(100, 300, 5)
         self.goodfood = GoodFood()
         self.badfood = BadFood()
         self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
