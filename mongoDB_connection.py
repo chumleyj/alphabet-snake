@@ -14,7 +14,14 @@ collection = db["snake"]
 
 
 
-post = {"_id": id, "name": "Erik", "Character": "Blade", "Character Race": "Dragonborn"}
-collection.insert_one(post)
+#post = {"_id": 4, "hardWords": ["Airplane", "Basketball", "Baseball", "Football", "Headlights", "Vacuum", "Mountain", "Receipt"]}
+#collection.insert_one(post)
+
+viewDB = collection.find({})
+print("Currently in MongoDB.")
+for x in viewDB:
+    print(x)
+    print()
+
 
 print("Working")
