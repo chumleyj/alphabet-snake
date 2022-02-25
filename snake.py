@@ -21,10 +21,10 @@ class Snake():
         self.y_speed = 0
         
         # load textures for different snake head directions
-        self.head_directions = [arcade.load_texture('snake_head_horz.png', width=self.speed, height=self.speed),
-                                arcade.load_texture('snake_head_horz.png', flipped_horizontally=True, width=self.speed, height=self.speed),
-                                arcade.load_texture('snake_head_vert.png', width=self.speed, height=self.speed),
-                                arcade.load_texture('snake_head_vert.png', flipped_vertically=True, width=self.speed, height=self.speed)
+        self.head_directions = [arcade.load_texture('snake_images\snake_head_horz.png', width=self.speed, height=self.speed),
+                                arcade.load_texture('snake_images\snake_head_horz.png', flipped_horizontally=True, width=self.speed, height=self.speed),
+                                arcade.load_texture('snake_images\snake_head_vert.png', width=self.speed, height=self.speed),
+                                arcade.load_texture('snake_images\snake_head_vert.png', flipped_vertically=True, width=self.speed, height=self.speed)
         ]
 
         # Ryan - instantiated snake_head
@@ -48,7 +48,7 @@ class Snake():
         # create sprites for snake body segments and add to snake_list
         # head is first element in list, then each segment is appended to ti
         for i in range(0, self.num_segments - 1):
-            segment = arcade.Sprite(filename='snake_segment.png', 
+            segment = arcade.Sprite(filename='snake_images\snake_segment.png', 
                                         image_height=self.speed,
                                         image_width=self.speed,
                                         center_x=x_start,
@@ -106,7 +106,7 @@ class Snake():
         """
         
         # create new segment sprite
-        new_segment = arcade.Sprite(filename='snake_segment.png',
+        new_segment = arcade.Sprite(filename='snake_images\snake_segment.png',
                                 image_height=self.speed,
                                 image_width=self.speed,
                                 center_x=0,
