@@ -1,5 +1,5 @@
 import arcade
-from random import randrange
+import food
 import snake
 from time import sleep
 
@@ -9,44 +9,6 @@ FOOD_COUNT = 10
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 800
 SCREEN_TITLE = 'Alphabet Snake'
-
-# Class for food items
-class TestFood():
-    def __init__(self):
-        self.food_list = None
-
-    def setup(self):
-        self.food_list = arcade.SpriteList()
-
-    def draw(self):
-        self.food_list.draw()
-
-class GoodFood(TestFood):
-    def setup(self):
-        super().setup()
-        # Create the food instance
-        food = arcade.Sprite("good_food.png")
-
-        # Position the good food
-        food.center_x = randrange(100, SCREEN_WIDTH - 100)
-        food.center_y = randrange(300, SCREEN_HEIGHT - 50)
-
-        # Add the food to the lists
-        self.food_list.append(food)
-
-class BadFood(TestFood):
-    def setup(self):
-        super().setup()
-        for i in range(FOOD_COUNT):
-            # Create the food instance
-            food = arcade.Sprite("food.png")
-
-            # Position the bad food
-            food.center_x = randrange(100, SCREEN_WIDTH - 100)
-            food.center_y = randrange(300, SCREEN_HEIGHT - 50)
-
-            # Add the food to the lists
-            self.food_list.append(food)
 
 class TestGame(arcade.Window):
     def __init__(self, width, height, title):
@@ -72,8 +34,8 @@ class TestGame(arcade.Window):
         
         """Ryan 2/2/2022 - updated to new parameters"""
         self.snake = snake.Snake(100, 300, 5)
-        self.goodfood = GoodFood()
-        self.badfood = BadFood()
+        self.goodfood = food.GoodFood()
+        self.badfood = food.BadFood()
         self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
         self.center_window()
         self.goodfood.setup()
