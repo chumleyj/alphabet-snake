@@ -1,18 +1,26 @@
-import mysql.connector
+import sqlite3
 
-mydb = mysql.connector.connect(
-    host='192.168.1.183',
-    user='root',
-    password='password1',
-    port='3306',
-    database='alphabet_snake'
-)
+conn = sqlite3.connect('words.db')
 
-mycursor = mydb.cursor()
+mycursor = conn.cursor()
 
-mycursor.execute('SELECT * FROM easy_words')
+mycursor.execute("SELECT * FROM easy_words")
 
 easy_words = mycursor.fetchall()
 
 for word in easy_words:
+    print(word)
+
+mycursor.execute("SELECT * FROM normal_words")
+
+normal_words = mycursor.fetchall()
+
+for word in normal_words:
+    print(word)
+
+mycursor.execute("SELECT * FROM hard_words")
+
+hard_words = mycursor.fetchall()
+
+for word in hard_words:
     print(word)
