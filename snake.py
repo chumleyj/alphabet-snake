@@ -94,10 +94,11 @@ class Snake():
         elif self.y_speed < 0:
             self.snake_list[0].set_texture(3)
 
+        """Ryan 2/25/2022 - updated to new parameters"""
         # check if reached edge of screen and force to turn around
-        if self.snake_list[0].center_x >= SCREEN_WIDTH or self.snake_list[0].center_x <= 0:
+        if self.snake_list[0].center_x >= (SCREEN_WIDTH - 100) or self.snake_list[0].center_x <= 100:
             self.x_speed *= -1
-        if self.snake_list[0].center_y >= SCREEN_HEIGHT or self.snake_list[0].center_y <= 0:
+        if self.snake_list[0].center_y >= (SCREEN_HEIGHT - 50) or self.snake_list[0].center_y <= 300:
             self.y_speed *= -1
 
     def grow(self):
