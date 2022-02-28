@@ -10,10 +10,13 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 800
 SCREEN_TITLE = 'Alphabet Snake'
 
-class TestGame(arcade.Window):
-    def __init__(self, width, height, title):
+"""Ryan 2/24/2022 - Change from arcade.Window to arcade.View and TestGame to TestView"""
+class TestView(arcade.View):
+    """Ryan 2/24/2022 - Remove width, height, title from __init__"""
+    def __init__(self):
         # call Window class initializer
-        super().__init__(width, height, title, resizable=False)
+        """Ryan 2/24/2022 - Remove width, height, title, resizable=False"""
+        super().__init__()
         self.background = None
         self.score = 0
         self.snake = None
@@ -22,22 +25,19 @@ class TestGame(arcade.Window):
         # Initializes sound and music
         self.init_sounds()
 
-    
     def init_sounds(self):
         self.yum = arcade.load_sound("sounds/yum.mp3")
         self.yuck = arcade.load_sound("sounds/yuck.mp3")
         self.bg_music = arcade.load_sound("sounds/bg_music.mp3")
-        self.bg_music.play(loop=True)
+        """Ryan 2/24/2022- loop=True caused issues when player restarted play; removed for now"""
+        self.media_player = self.bg_music.play()
 
     # sets up the game variables
     def setup(self):
-        
-        """Ryan 2/2/2022 - updated to new parameters"""
         self.snake = snake.Snake(100, 300, 5)
         self.goodfood = food.GoodFood()
         self.badfood = food.BadFood()
         self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
-        self.center_window()
         self.goodfood.setup()
         self.badfood.setup()
 
@@ -90,8 +90,12 @@ class TestGame(arcade.Window):
         # If snake collides with itself, the game quits
         for seg in snake_collision:
             arcade.play_sound(self.yuck)
-            sleep(1)
-            quit()
+            """Ryan 2/24/2022 - Updated"""
+            # Stops music when player dies
+            self.media_player.pause()
+            # Brings up Game Over screen
+            view = GameOverView()
+            self.window.show_view(view)
 
     # handle key press
     def on_key_press(self, symbol, modifiers):
@@ -113,10 +117,55 @@ class TestGame(arcade.Window):
     def on_key_release(self, symbol, modifiers):
         pass
 
+"""Ryan 2/24/2022- Added StartView"""
+# Class for the starting view that will show once a user loads the game
+class StartView(arcade.View):
+
+    def on_show(self):
+        # Sets the background color of the StartView
+        arcade.set_background_color(arcade.csscolor.BLACK)
+
+    def on_draw(self):
+        self.clear()
+        # Draws text on the screen
+        arcade.draw_text("Alphabet Snake", self.window.width / 2, self.window.height / 2,
+                         arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Click to advance", self.window.width / 2, self.window.height / 2-75,
+                         arcade.color.WHITE, font_size=20, anchor_x="center")
+
+    # Will go to main gameplay once they click on the screen
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        test_view = TestView()
+        test_view.setup()
+        self.window.show_view(test_view)    
+
+"""Ryan 2/24/2022 - added GameOverView for when the player dies"""
+# Screen that shows once a player dies
+class GameOverView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        # Background image that populates once the player dies
+        self.texture = arcade.load_texture("images/game_over.jpg")
+
+    def on_draw(self):
+        self.clear()
+        # Populates the screen with the background image
+        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                                SCREEN_WIDTH, SCREEN_HEIGHT)
+
+    # Allows the user to return to normal gameplay by clicking the screen
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        game_view = TestView()
+        game_view.setup()
+        self.window.show_view(game_view)
+
 def main():
-    my_game = TestGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
-    my_game.setup()
-    my_game.set_update_rate(1/20)
+    """Ryan 2/24/2022 - changed this stuff from windows to views"""
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    window.center_window()
+    start_view = StartView()
+    window.show_view(start_view)
+    window.set_update_rate(1/20)
     arcade.run()
 
 if __name__ == '__main__':
