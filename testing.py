@@ -35,12 +35,19 @@ class TestView(arcade.View):
     # sets up the game variables
     def setup(self):
         self.snake = snake.Snake(100, 300, 5)
-        self.goodfood = food.GoodFood()
-        self.badfood = food.BadFood()
+        self.goodfood = food.GoodLetterList()
+        self.badfood = food.BadLetterList()
         self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
-        self.goodfood.setup()
-        self.badfood.setup()
+        self.setup_letters('a') #NEEDS UPDATED TO TAKE A PARAMETER THAT IS THE NEXT LETTER IN THE WORD
 
+    # setup new lists of good and bad letters
+    def setup_letters(self, letter):
+        self.goodfood.clear()
+        self.badfood.clear()
+
+        self.goodfood.setup(letter, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
+        self.badfood.setup(letter, FOOD_COUNT, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
+        
     # handles drawing for background and sprites
     def on_draw(self):
         # clears previous drawing
@@ -62,12 +69,12 @@ class TestView(arcade.View):
 
         """Jeff - updated collision handling"""
         for seg in self.snake.snake_list:
-            goodfood_collision = arcade.check_for_collision_with_list(seg, self.goodfood.food_list)
+            goodfood_collision = arcade.check_for_collision_with_list(seg, self.goodfood)
             if goodfood_collision:
                 break
 
         for seg in self.snake.snake_list:
-            badfood_collision = arcade.check_for_collision_with_list(seg, self.badfood.food_list)
+            badfood_collision = arcade.check_for_collision_with_list(seg, self.badfood)
             if badfood_collision:
                 break
 
@@ -75,17 +82,17 @@ class TestView(arcade.View):
         snake_collision = arcade.check_for_collision_with_list(self.snake.snake_head, self.snake.snake_list)
 
         # If the snake eats good food, score increases, gives sound effect, and all food resets        
-        for self.goodfood.food in goodfood_collision:
+        for food in goodfood_collision:
             self.score += 1
             arcade.play_sound(self.yum)
-            self.goodfood.setup()
-            self.badfood.setup()
+            food.remove_from_sprite_lists()
+            self.setup_letters('b') #NEEDS UPDATED TO TAKE A PARAMETER THAT IS THE NEXT LETTER IN THE WORD
 
         # If the snake eats bad food, it grows, gives sound effect, and the food disappears
-        for self.badfood.food in badfood_collision:
+        for food in badfood_collision:
             self.snake.grow()
             arcade.play_sound(self.yuck)
-            self.badfood.food.remove_from_sprite_lists()
+            food.remove_from_sprite_lists()
 
         # If snake collides with itself, the game quits
         for seg in snake_collision:
