@@ -9,6 +9,7 @@ FOOD_COUNT = 10
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 800
 SCREEN_TITLE = 'Alphabet Snake'
+TILE_SCALING = 0.5
 
 """Ryan 2/24/2022 - Change from arcade.Window to arcade.View and TestGame to TestView"""
 class TestView(arcade.View):
@@ -22,8 +23,10 @@ class TestView(arcade.View):
         self.snake = None
         self.goodfood = None
         self.badfood = None
+        self.wall = None
         # Initializes sound and music
         self.init_sounds()
+        
 
     def init_sounds(self):
         self.yum = arcade.load_sound("sounds/yum.mp3")
@@ -39,6 +42,8 @@ class TestView(arcade.View):
         self.badfood = food.BadLetterList()
         self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
         self.setup_letters('a') #NEEDS UPDATED TO TAKE A PARAMETER THAT IS THE NEXT LETTER IN THE WORD
+        #self.wall = 
+    
 
     # setup new lists of good and bad letters
     def setup_letters(self, letter):
@@ -47,6 +52,10 @@ class TestView(arcade.View):
 
         self.goodfood.setup(letter, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
         self.badfood.setup(letter, FOOD_COUNT, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
+    
+    
+    
+
         
     # handles drawing for background and sprites
     def on_draw(self):
