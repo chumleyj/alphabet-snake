@@ -1,44 +1,65 @@
 import arcade
-from random import randrange
+from random import randrange, choice
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 800
-FOOD_COUNT = 10
+# all possible letters
+LETTER_OPTIONS = "abcdefghijklmnopqrstuvwxyz"
 
 # Class for food items
-class TestFood():
+class Letter(arcade.Sprite):
+    def __init__(self, letter_image, x_min, x_max, y_min, y_max):
+        super().__init__(filename=letter_image, 
+                         center_x=randrange(x_min, x_max), 
+                         center_y=randrange(y_min, y_max))
+
+# Class for a SpriteList of good letters
+class GoodLetterList(arcade.SpriteList):
     def __init__(self):
-        self.food_list = None
+        super().__init__()
+        self.x_min = None
+        self.x_max = None
+        self.y_min = None
+        self.y_max = None
+    
+    # Create a Letter sprite with the good letter and add to the sprite list
+    def setup(self, letter, x_min, x_max, y_min, y_max):
+        # create the filename for the letter
+        good_letter = "Alphabet/" + letter.lower() + ".png"
+        good_letter_sprite = Letter(good_letter, x_min, x_max, y_min, y_max)
+        self.append(good_letter_sprite)
 
-    def setup(self):
-        self.food_list = arcade.SpriteList()
+# Class for a SpriteList of 
+class BadLetterList(arcade.SpriteList):
+    def __init__(self):
+        super().__init__()
+        self.x_min = None
+        self.x_max = None
+        self.y_min = None
+        self.y_max = None
+        self.letter_count = None
+    
+    # Create a number of letter sprites equal to the bad_letter_count parameter.
+    # Letter sprites are any letter other than avoid_letter. Will not duplicate
+    # letters.
+    def setup(self, avoid_letter, bad_letter_count, x_min, x_max, y_min, y_max):
+        
+        # prevent exceeding max number of letters
+        if bad_letter_count > 25:
+            self.letter_count = 25
+        else:
+            self.letter_count = bad_letter_count
+        
+        # remove the letter to avoid from the list of options
+        letter_options = LETTER_OPTIONS.replace(avoid_letter, "")
 
-    def draw(self):
-        self.food_list.draw()
+        # add bad letters to SpriteList
+        for i in range(self.letter_count):
+            # select a random letter to add
+            letter = choice(letter_options)
+            # remove selected letter from the options (prevents duplicate bad letters)
+            letter_options = letter_options.replace(letter, "")
+            # convert letter to filename for that letter
+            letter = "Alphabet/" + letter.lower() + ".png"
 
-class GoodFood(TestFood):
-    def setup(self):
-        super().setup()
-        # Create the food instance
-        food = arcade.Sprite("good_food.png")
-
-        # Position the good food
-        food.center_x = randrange(100, SCREEN_WIDTH - 100)
-        food.center_y = randrange(300, SCREEN_HEIGHT - 50)
-
-        # Add the food to the lists
-        self.food_list.append(food)
-
-class BadFood(TestFood):
-    def setup(self):
-        super().setup()
-        for i in range(FOOD_COUNT):
-            # Create the food instance
-            food = arcade.Sprite("food.png")
-
-            # Position the bad food
-            food.center_x = randrange(100, SCREEN_WIDTH - 100)
-            food.center_y = randrange(300, SCREEN_HEIGHT - 50)
-
-            # Add the food to the lists
-            self.food_list.append(food)
+            # create Letter sprite and add to SpriteList
+            bad_letter = Letter(letter, x_min, x_max, y_min, y_max)
+            self.append(bad_letter)
