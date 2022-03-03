@@ -175,6 +175,38 @@ class StartView(arcade.View):
         test_view.setup()
         self.window.show_view(test_view)    
 
+    def on_key_press(self, symbol, modifiers):
+        if (symbol == arcade.key.RIGHT):
+            instruction_view = InstructionView()
+            self.window.show_view(instruction_view)    
+
+"""Ryan 3/3/2022- Added InstructionView"""
+# Class for an instruction view
+class InstructionView(arcade.View):
+
+    def on_show(self):
+        # Sets the background color of the StartView
+        arcade.set_background_color(arcade.csscolor.BLACK)
+
+    def on_draw(self):
+        self.clear()
+        # Draws text on the screen
+        arcade.draw_text("Instructions", self.window.width / 2, self.window.height / 2,
+                         arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Click to advance", self.window.width / 2, self.window.height / 2-75,
+                         arcade.color.WHITE, font_size=20, anchor_x="center")
+
+    # Will go to main gameplay once they click on the screen
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        test_view = TestView()
+        test_view.setup()
+        self.window.show_view(test_view)    
+
+    def on_key_press(self, symbol, modifiers):
+        if (symbol == arcade.key.LEFT):
+            start_view = StartView()
+            self.window.show_view(start_view)    
+
 """Ryan 2/24/2022 - added GameOverView for when the player dies"""
 # Screen that shows once a player dies
 class GameOverView(arcade.View):
