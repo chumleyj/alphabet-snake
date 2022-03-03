@@ -25,6 +25,8 @@ class TestView(arcade.View):
         self.goodfood = None
         self.badfood = None
         self.wall = None
+        self.wordImage = None
+
         # Initializes sound and music
         self.init_sounds()
         
@@ -38,26 +40,28 @@ class TestView(arcade.View):
 
     # sets up the game variables
     def setup(self):
-        self.snake = snake.Snake(105, 295, 5)
+        self.snake = snake.Snake(105, 295, 7)
         self.goodfood = food.GoodLetterList()
         self.badfood = food.BadLetterList()
         self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
         self.setup_letters('a') #NEEDS UPDATED TO TAKE A PARAMETER THAT IS THE NEXT LETTER IN THE WORD
         self.wall = arcade.SpriteList()
+        self.wordImage = arcade.SpriteList()
 
-        # Manually create and position a box at 300, 200
-        #wall = arcade.Sprite("Alphabet\j.png", SPRITE_SCALING_BOX)
-        #wall.center_x = 300
-        #wall.center_y = 200
-        #self.wall.append(wall)
 
-        for x in range(95, 1200, 5):
-            wall = arcade.Sprite("Alphabet\chalk.png", SPRITE_SCALING_BOX)
+
+        # wall setting
+        for x in range(95, 1200, 7):
+            wall = arcade.Sprite("Alphabet\chalk2.png", SPRITE_SCALING_BOX)
             wall.center_x = x
             wall.center_y = 285
             self.wall.append(wall)
 
-
+        # Manually create and position a word image at 200, 170
+        wordImage = arcade.Sprite("images\wordImages\\hat.png", SPRITE_SCALING_BOX)
+        wordImage.center_x = 200
+        wordImage.center_y = 170
+        self.wordImage.append(wordImage)
     
 
     # setup new lists of good and bad letters
@@ -84,6 +88,7 @@ class TestView(arcade.View):
         self.goodfood.draw()
         self.badfood.draw()
         self.wall.draw()
+        self.wordImage.draw()
         arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 12, font_name='arial')
 
 
