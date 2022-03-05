@@ -63,3 +63,39 @@ class BadLetterList(arcade.SpriteList):
             # create Letter sprite and add to SpriteList
             bad_letter = Letter(letter, x_min, x_max, y_min, y_max)
             self.append(bad_letter)
+
+# Class for a completed letter list
+class CompletedLetterList(arcade.SpriteList):
+    def __init__(self):
+        super.__init__()
+        self.num_letters = None
+        self.x_center = None
+        self.y_center = None
+    
+    # create sprites for each letter in the word and an underscore for each letter
+    def setup(self, word, center_y, center_start_x):
+        self.x_center = center_start_x
+        self.y_center = center_y
+        self.num_letters = len(word)
+
+        letter_offset = 0
+
+        for letter in word:
+            new_letter = "Alphabet/" + letter.lower() + ".png"
+            new_letter_sprite = Letter(new_letter, 
+                                       self.x_center + letter_offset, 
+                                       self.x_center + letter_offset, 
+                                       self.y_center, 
+                                       self.y_center)
+            new_letter_sprite.visible = False
+            self.append(new_letter_sprite)
+            new_underscore_sprite = Letter("images\white_underscore.png", 
+                                           self.x_center + letter_offset, 
+                                           self.x_center + letter_offset, 
+                                           self.y_center - 30, 
+                                           self.y_center - 30)
+            self.append(new_underscore_sprite)
+            letter_offset += 30
+    
+    def reveal_next_letter():
+        pass

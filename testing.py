@@ -11,6 +11,10 @@ SCREEN_HEIGHT = 800
 SCREEN_TITLE = 'Alphabet Snake'
 TILE_SCALING = 0.5
 SPRITE_SCALING_BOX = 0.5
+FOUND_LETTER_SPACE = { 
+    'x_center_start': 100, 
+    'y_center': 100, 
+}
 
 """Ryan 2/24/2022 - Change from arcade.Window to arcade.View and TestGame to TestView"""
 class TestView(arcade.View):
@@ -66,9 +70,12 @@ class TestView(arcade.View):
 
     # setup new lists of good and bad letters
     def setup_letters(self, letter):
+        
+        # remove all existing letters from good and bad food
         self.goodfood.clear()
         self.badfood.clear()
 
+        # add next letter to good letter list and other random letters to bad letter list
         self.goodfood.setup(letter, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
         self.badfood.setup(letter, FOOD_COUNT, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
     
