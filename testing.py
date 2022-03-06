@@ -12,8 +12,8 @@ SCREEN_TITLE = 'Alphabet Snake'
 TILE_SCALING = 0.5
 SPRITE_SCALING_BOX = 0.5
 FOUND_LETTER_SPACE = { 
-    'x_center_start': 100, 
-    'y_center': 100, 
+    'x_center_start': 170, 
+    'y_center': 300, 
 }
 
 """Ryan 2/24/2022 - Change from arcade.Window to arcade.View and TestGame to TestView"""
@@ -28,6 +28,7 @@ class TestView(arcade.View):
         self.snake = None
         self.goodfood = None
         self.badfood = None
+        self.completed_letters = None
         self.wall = None
         self.wordImage = None
 
@@ -44,15 +45,22 @@ class TestView(arcade.View):
 
     # sets up the game variables
     def setup(self):
+        self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
+        
+        # create snake Sprite
         self.snake = snake.Snake(105, 295, 7)
+        
+        # create SpriteLists for correct and incorrect letters
         self.goodfood = food.GoodLetterList()
         self.badfood = food.BadLetterList()
-        self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
-        self.setup_letters('a') #NEEDS UPDATED TO TAKE A PARAMETER THAT IS THE NEXT LETTER IN THE WORD
+        self.setup_letters('a') # NEEDS UPDATED TO PASS THE NEXT LETTER IN THE WORD AS THE PARAMETER
+        
         self.wall = arcade.SpriteList()
         self.wordImage = arcade.SpriteList()
-
-
+        
+        # create SpriteList to display correctly found letters
+        self.completed_letters = food.CompletedLetterList()
+        self.completed_letters.setup(4, FOUND_LETTER_SPACE["x_center_start"], FOUND_LETTER_SPACE["y_center"])
 
         # wall setting
         for x in range(95, 1200, 7):
@@ -78,11 +86,8 @@ class TestView(arcade.View):
         # add next letter to good letter list and other random letters to bad letter list
         self.goodfood.setup(letter, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
         self.badfood.setup(letter, FOOD_COUNT, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
-    
-    
-    
 
-        
+
     # handles drawing for background and sprites
     def on_draw(self):
         # clears previous drawing
@@ -96,6 +101,7 @@ class TestView(arcade.View):
         self.badfood.draw()
         self.wall.draw()
         self.wordImage.draw()
+        self.completed_letters.draw()
         arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 12, font_name='arial')
 
 
@@ -121,8 +127,16 @@ class TestView(arcade.View):
         for food in goodfood_collision:
             self.score += 1
             arcade.play_sound(self.yum)
+            
+            # get name of letter found and add it to completed letters
+            letter_name = food.letter_name
+            self.completed_letters.add_letter(letter_name)
             food.remove_from_sprite_lists()
-            self.setup_letters('b') #NEEDS UPDATED TO TAKE A PARAMETER THAT IS THE NEXT LETTER IN THE WORD
+            
+            ### NEED LOGIC HERE FOR DETERMINING IF THE LETTER COMPLETED WAS THE LAST ONE IN THE WORD ###
+            
+            # setup the next round of letters
+            self.setup_letters('b') # NEEDS UPDATED TO PASS THE NEXT LETTER IN THE WORD AS THE PARAMETER
 
         # If the snake eats bad food, it grows, gives sound effect, and the food disappears
         for food in badfood_collision:

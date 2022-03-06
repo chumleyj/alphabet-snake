@@ -3,11 +3,14 @@ from random import randrange, choice
 
 # all possible letters
 LETTER_OPTIONS = "abcdefghijklmnopqrstuvwxyz"
+LETTER_OFFSET = 50
 
 # Class for food items
 class Letter(arcade.Sprite):
-    def __init__(self, letter_image, x_min, x_max, y_min, y_max):
-        super().__init__(filename=letter_image, 
+    def __init__(self, letter, x_min, x_max, y_min, y_max):
+        self.letter_name = letter
+        self.letter_file = "Alphabet/" + letter.lower() + ".png"
+        super().__init__(filename=self.letter_file, 
                          center_x=randrange(x_min, x_max), 
                          center_y=randrange(y_min, y_max))
 
@@ -23,8 +26,7 @@ class GoodLetterList(arcade.SpriteList):
     # Create a Letter sprite with the good letter and add to the sprite list
     def setup(self, letter, x_min, x_max, y_min, y_max):
         # create the filename for the letter
-        good_letter = "Alphabet/" + letter.lower() + ".png"
-        good_letter_sprite = Letter(good_letter, x_min, x_max, y_min, y_max)
+        good_letter_sprite = Letter(letter, x_min, x_max, y_min, y_max)
         self.append(good_letter_sprite)
 
 # Class for a SpriteList of 
@@ -57,8 +59,6 @@ class BadLetterList(arcade.SpriteList):
             letter = choice(letter_options)
             # remove selected letter from the options (prevents duplicate bad letters)
             letter_options = letter_options.replace(letter, "")
-            # convert letter to filename for that letter
-            letter = "Alphabet/" + letter.lower() + ".png"
 
             # create Letter sprite and add to SpriteList
             bad_letter = Letter(letter, x_min, x_max, y_min, y_max)
@@ -67,35 +67,35 @@ class BadLetterList(arcade.SpriteList):
 # Class for a completed letter list
 class CompletedLetterList(arcade.SpriteList):
     def __init__(self):
-        super.__init__()
+        super().__init__()
         self.num_letters = None
         self.x_center = None
         self.y_center = None
+        self.x_offset = None
     
-    # create sprites for each letter in the word and an underscore for each letter
-    def setup(self, word, center_y, center_start_x):
+    # create underscore sprites for each letter in the word
+    def setup(self, num_letters, center_y, center_start_x):
+        
         self.x_center = center_start_x
         self.y_center = center_y
-        self.num_letters = len(word)
+        self.num_letters = num_letters
+        self.x_offset = 0
 
         letter_offset = 0
 
-        for letter in word:
-            new_letter = "Alphabet/" + letter.lower() + ".png"
-            new_letter_sprite = Letter(new_letter, 
-                                       self.x_center + letter_offset, 
-                                       self.x_center + letter_offset, 
-                                       self.y_center, 
-                                       self.y_center)
-            new_letter_sprite.visible = False
-            self.append(new_letter_sprite)
-            new_underscore_sprite = Letter("images\white_underscore.png", 
-                                           self.x_center + letter_offset, 
-                                           self.x_center + letter_offset, 
-                                           self.y_center - 30, 
-                                           self.y_center - 30)
+        for i in range(0, self.num_letters):
+            new_underscore_sprite = arcade.Sprite(filename="images\white_underscore.png", 
+                                           center_x=self.x_center + letter_offset, 
+                                           center_y=self.y_center - 30)
             self.append(new_underscore_sprite)
-            letter_offset += 30
+            letter_offset += LETTER_OFFSET
     
-    def reveal_next_letter():
-        pass
+    # add a new letter to the SpriteList
+    def add_letter(self, completed_letter):
+        new_letter_sprite = Letter(completed_letter, 
+                                   self.x_center + self.x_offset, 
+                                   self.x_center + self.x_offset + 1, 
+                                   self.y_center, 
+                                   self.y_center + 1)
+        self.append(new_letter_sprite)
+        self.x_offset += LETTER_OFFSET
