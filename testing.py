@@ -190,7 +190,7 @@ class StartView(arcade.View):
         arcade.draw_text("Click to advance", self.window.width / 2, self.window.height / 2-75,
                          arcade.color.WHITE, font_size=20, anchor_x="center")
 
-"""Ryan 3/7/2022 - Updated to have more sensible key commands"""
+    # Commands while in the StartView
     def on_key_press(self, symbol, modifiers):
         # Will go into the instruction screen once the player presses the right arrow key
         if (symbol == arcade.key.RIGHT):
@@ -201,9 +201,8 @@ class StartView(arcade.View):
             test_view = TestView()
             test_view.setup()
             self.window.show_view(test_view)    
-
-"""Ryan 3/7/2022- Updated to have background and more sensible key commands"""
-# Class for an instruction view
+            
+# Commands while in the InstructionView
 class InstructionView(arcade.View):
 
     def on_show(self):
@@ -242,10 +241,12 @@ class GameOverView(arcade.View):
                                 SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # Allows the user to return to normal gameplay by clicking the screen
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        game_view = TestView()
-        game_view.setup()
-        self.window.show_view(game_view)
+    def on_key_press(self, symbol, modifiers):
+        # Will go to main gameplay once player presses 'P'
+        if (symbol == arcade.key.P):
+            test_view = TestView()
+            test_view.setup()
+            self.window.show_view(test_view)    
 
 def main():
     """Ryan 2/24/2022 - changed this stuff from windows to views"""
