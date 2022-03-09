@@ -174,21 +174,20 @@ class TestView(arcade.View):
     def on_key_release(self, symbol, modifiers):
         pass
 
-"""Ryan 2/24/2022- Added StartView"""
+"""Ryan 3/9/2022- Updated StartView"""
 # Class for the starting view that will show once a user loads the game
 class StartView(arcade.View):
 
     def on_show(self):
-        # Sets the background color of the StartView
-        arcade.set_background_color(arcade.csscolor.BLACK)
+        # Creates the resources that will be used in the StartView
+        self.background = arcade.load_texture("images/startview.jpg")
+        self.yum = arcade.load_sound("sounds/yum.mp3")
 
     def on_draw(self):
         self.clear()
-        # Draws text on the screen
-        arcade.draw_text("Alphabet Snake", self.window.width / 2, self.window.height / 2,
-                         arcade.color.WHITE, font_size=50, anchor_x="center")
-        arcade.draw_text("Click to advance", self.window.width / 2, self.window.height / 2-75,
-                         arcade.color.WHITE, font_size=20, anchor_x="center")
+        # Creates the background
+        arcade.start_render()
+        arcade.draw_lrwh_rectangle_textured(0,0,SCREEN_WIDTH,SCREEN_HEIGHT,self.background)
 
     # Commands while in the StartView
     def on_key_press(self, symbol, modifiers):
@@ -198,6 +197,7 @@ class StartView(arcade.View):
             self.window.show_view(instruction_view)    
         # Will go to main gameplay once player presses 'P'
         elif (symbol == arcade.key.P):
+            arcade.play_sound(self.yum)
             test_view = TestView()
             test_view.setup()
             self.window.show_view(test_view)    
