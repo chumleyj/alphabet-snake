@@ -226,11 +226,13 @@ class InstructionView(arcade.View):
             test_view.setup()
             self.window.show_view(test_view)    
 
-"""Ryan 2/24/2022 - added GameOverView for when the player dies"""
-# Screen that shows once a player dies
+"""Ryan 3/10/2022 - added music for GameOverView"""
+# Screen and music that starts once a player dies
 class GameOverView(arcade.View):
     def __init__(self):
         super().__init__()
+        self.bg_music = arcade.load_sound("sounds/chopin_funeral_march.mp3")
+        self.media_player = self.bg_music.play()
         # Background image that populates once the player dies
         self.texture = arcade.load_texture("images/game_over.jpg")
 
@@ -244,6 +246,7 @@ class GameOverView(arcade.View):
     def on_key_press(self, symbol, modifiers):
         # Will go to main gameplay once player presses 'P'
         if (symbol == arcade.key.P):
+            self.media_player.pause()
             test_view = TestView()
             test_view.setup()
             self.window.show_view(test_view)    
