@@ -15,8 +15,8 @@ TILE_SCALING = 0.5
 SPRITE_SCALING_BOX = 0.5
 FOUND_LETTER_SPACE = {
     'image_x_center': 200, 
-    'letter_x_center_start': 170, 
-    'y_center': 300, 
+    'letter_x_center_start': 300, 
+    'y_center': 170, 
 }
 
 """Ryan 2/24/2022 - Change from arcade.Window to arcade.View and TestGame to TestView"""
@@ -77,7 +77,7 @@ class TestView(arcade.View):
 
         # create SpriteList to display correctly found letters
         self.completed_letters = food.CompletedLetterList()
-        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["letter_x_center_start"], FOUND_LETTER_SPACE["y_center"])
+        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"], FOUND_LETTER_SPACE["letter_x_center_start"])
 
 
     # setup current word image sprite
@@ -165,7 +165,7 @@ class TestView(arcade.View):
                 self.setup_word_image(self.current_word.word_file)
 
                 # setup the completed letters SpriteList for the new word
-                self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["letter_x_center_start"], FOUND_LETTER_SPACE["y_center"])
+                self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"], FOUND_LETTER_SPACE["letter_x_center_start"])
 
             # setup the next round of letters
             self.setup_letters(self.current_word.current_letter())
