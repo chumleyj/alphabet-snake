@@ -1,4 +1,5 @@
 import arcade
+import database
 import food
 import snake
 import word
@@ -35,6 +36,7 @@ class TestView(arcade.View):
         self.wall = None
         self.word_image = None
         self.current_word = None
+        self.database = None
 
         # Initializes sound and music
         self.init_sounds()
@@ -49,6 +51,10 @@ class TestView(arcade.View):
 
     # sets up the game variables
     def setup(self):
+        
+        #Creates Database for Users
+        self.database = database.create_database()
+        
         # setup background image
         self.background = arcade.load_texture("blackboard.jpg")
         
