@@ -51,7 +51,7 @@ class BadLetterList(arcade.SpriteList):
             self.letter_count = bad_letter_count
         
         # remove the letter to avoid from the list of options
-        letter_options = LETTER_OPTIONS.replace(avoid_letter, "")
+        letter_options = LETTER_OPTIONS.replace(avoid_letter.lower(), "")
 
         # add bad letters to SpriteList
         for i in range(self.letter_count):
