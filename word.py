@@ -1,4 +1,4 @@
-from database import *
+from database import select_word
 
 class Word():
     def __init__(self):
@@ -9,7 +9,6 @@ class Word():
 
     def word_array(self, word):
         wordArray = [x for x in word]
-
         return wordArray
 
     def current_letter(self):
@@ -19,7 +18,4 @@ class Word():
         return len(self.word_name)
 
     def word_end(self):
-        if self.word_index == self.word_length():
-            return True
-        else:
-            return False
+        return self.word_index == self.word_length()
