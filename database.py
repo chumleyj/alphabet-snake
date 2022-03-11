@@ -23,7 +23,7 @@ def create_database():
         (3, 'Cat'),
         (4, 'Clock'),
         (5, 'Hat'),
-        (6, 'House'),
+        (6, 'House')
     ]
     mycursor.executemany("INSERT INTO game_words VALUES (?,?)", insert_words)
 
@@ -54,18 +54,3 @@ def select_word():
     selected_word = game_words[word_id]
 
     return selected_word
-
-
-def word_array():
-
-    word = select_word()
-
-    wordArray = [x for x in word]
-
-    print(wordArray)
-
-
-create_database()
-get_words()
-select_word()
-word_array()

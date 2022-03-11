@@ -1,6 +1,8 @@
 import arcade
 import food
 import snake
+import word
+from database import *
 from time import sleep
 
 # Defines the number of bad_food items
@@ -31,6 +33,7 @@ class TestView(arcade.View):
         self.completed_letters = None
         self.wall = None
         self.wordImage = None
+        self.current_word = None
 
         # Initializes sound and music
         self.init_sounds()
@@ -50,17 +53,8 @@ class TestView(arcade.View):
         # create snake Sprite
         self.snake = snake.Snake(105, 295, 7)
         
-        # create SpriteLists for correct and incorrect letters
-        self.goodfood = food.GoodLetterList()
-        self.badfood = food.BadLetterList()
-        self.setup_letters('a') # NEEDS UPDATED TO PASS THE NEXT LETTER IN THE WORD AS THE PARAMETER
-        
         self.wall = arcade.SpriteList()
         self.wordImage = arcade.SpriteList()
-        
-        # create SpriteList to display correctly found letters
-        self.completed_letters = food.CompletedLetterList()
-        self.completed_letters.setup(4, FOUND_LETTER_SPACE["x_center_start"], FOUND_LETTER_SPACE["y_center"])
 
         # wall setting
         for x in range(95, 1200, 7):
@@ -69,8 +63,20 @@ class TestView(arcade.View):
             wall.center_y = 285
             self.wall.append(wall)
 
+        #Selected word
+        self.current_word = word.Word()
+
+        # create SpriteLists for correct and incorrect letters
+        self.goodfood = food.GoodLetterList()
+        self.badfood = food.BadLetterList()
+        self.setup_letters(self.current_word.current_letter())
+
+        # create SpriteList to display correctly found letters
+        self.completed_letters = food.CompletedLetterList()
+        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["x_center_start"], FOUND_LETTER_SPACE["y_center"])
+
         # Manually create and position a word image at 200, 170
-        wordImage = arcade.Sprite("images\wordImages\\hat.png", SPRITE_SCALING_BOX)
+        wordImage = arcade.Sprite(self.current_word.word_file, SPRITE_SCALING_BOX)
         wordImage.center_x = 200
         wordImage.center_y = 170
         self.wordImage.append(wordImage)
@@ -134,9 +140,20 @@ class TestView(arcade.View):
             food.remove_from_sprite_lists()
             
             ### NEED LOGIC HERE FOR DETERMINING IF THE LETTER COMPLETED WAS THE LAST ONE IN THE WORD ###
-            
+            self.current_word.word_index += 1
+
+            if self.current_word.word_end():
+                self.current_word = word.Word()
+                self.wordImage.clear()
+                self.completed_letters.clear()
+                wordImage = arcade.Sprite(self.current_word.word_file, SPRITE_SCALING_BOX)
+                wordImage.center_x = 200
+                wordImage.center_y = 170
+                self.wordImage.append(wordImage)
+                self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["x_center_start"], FOUND_LETTER_SPACE["y_center"])
+
             # setup the next round of letters
-            self.setup_letters('b') # NEEDS UPDATED TO PASS THE NEXT LETTER IN THE WORD AS THE PARAMETER
+            self.setup_letters(self.current_word.current_letter())
 
         # If the snake eats bad food, it grows, gives sound effect, and the food disappears
         for food in badfood_collision:
