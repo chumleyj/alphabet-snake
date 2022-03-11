@@ -13,8 +13,9 @@ SCREEN_HEIGHT = 800
 SCREEN_TITLE = 'Alphabet Snake'
 TILE_SCALING = 0.5
 SPRITE_SCALING_BOX = 0.5
-FOUND_LETTER_SPACE = { 
-    'x_center_start': 170, 
+FOUND_LETTER_SPACE = {
+    'image_x_center': 200, 
+    'letter_x_center_start': 170, 
     'y_center': 300, 
 }
 
@@ -32,7 +33,7 @@ class TestView(arcade.View):
         self.badfood = None
         self.completed_letters = None
         self.wall = None
-        self.wordImage = None
+        self.word_image = None
         self.current_word = None
 
         # Initializes sound and music
@@ -48,23 +49,26 @@ class TestView(arcade.View):
 
     # sets up the game variables
     def setup(self):
-        self.background = arcade.load_texture("blackboard.jpg")            #Erik testing blackboard.jpg
+        # setup background image
+        self.background = arcade.load_texture("blackboard.jpg")
         
         # create snake Sprite
         self.snake = snake.Snake(105, 295, 7)
         
+        # create walls
         self.wall = arcade.SpriteList()
-        self.wordImage = arcade.SpriteList()
-
-        # wall setting
         for x in range(95, 1200, 7):
             wall = arcade.Sprite("Alphabet\chalk2.png", SPRITE_SCALING_BOX)
             wall.center_x = x
             wall.center_y = 285
             self.wall.append(wall)
 
-        #Selected word
+        # set current word to spell
         self.current_word = word.Word()
+        
+        # Manually create and position a word image
+        self.word_image = arcade.SpriteList()
+        self.setup_word_image(self.current_word.word_file)
 
         # create SpriteLists for correct and incorrect letters
         self.goodfood = food.GoodLetterList()
@@ -73,15 +77,20 @@ class TestView(arcade.View):
 
         # create SpriteList to display correctly found letters
         self.completed_letters = food.CompletedLetterList()
-        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["x_center_start"], FOUND_LETTER_SPACE["y_center"])
+        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["letter_x_center_start"], FOUND_LETTER_SPACE["y_center"])
 
-        # Manually create and position a word image at 200, 170
-        wordImage = arcade.Sprite(self.current_word.word_file, SPRITE_SCALING_BOX)
-        wordImage.center_x = 200
-        wordImage.center_y = 170
-        self.wordImage.append(wordImage)
+
+    # setup current word image sprite
+    def setup_word_image(self, filename):
+        
+        # create sprite for the word image
+        word_image_sprite = arcade.Sprite(filename, SPRITE_SCALING_BOX)
+        word_image_sprite.center_x = FOUND_LETTER_SPACE["image_x_center"]
+        word_image_sprite.center_y = FOUND_LETTER_SPACE["y_center"]
+        
+        # add to word image SpriteList
+        self.word_image.append(word_image_sprite)
     
-
     # setup new lists of good and bad letters
     def setup_letters(self, letter):
         
@@ -106,7 +115,7 @@ class TestView(arcade.View):
         self.goodfood.draw()
         self.badfood.draw()
         self.wall.draw()
-        self.wordImage.draw()
+        self.word_image.draw()
         self.completed_letters.draw()
         arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 12, font_name='arial')
 
@@ -139,18 +148,24 @@ class TestView(arcade.View):
             self.completed_letters.add_letter(letter_name)
             food.remove_from_sprite_lists()
             
-            ### NEED LOGIC HERE FOR DETERMINING IF THE LETTER COMPLETED WAS THE LAST ONE IN THE WORD ###
+            # increment index of current word
             self.current_word.word_index += 1
 
+            # if at the end of the current word, create a new word
             if self.current_word.word_end():
-                self.current_word = word.Word()
-                self.wordImage.clear()
+                
+                # clear SpriteLists
+                self.word_image.clear()
                 self.completed_letters.clear()
-                wordImage = arcade.Sprite(self.current_word.word_file, SPRITE_SCALING_BOX)
-                wordImage.center_x = 200
-                wordImage.center_y = 170
-                self.wordImage.append(wordImage)
-                self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["x_center_start"], FOUND_LETTER_SPACE["y_center"])
+                
+                # create a new word
+                self.current_word = word.Word()
+                
+                # setup the new word
+                self.setup_word_image(self.current_word.word_file)
+
+                # setup the completed letters SpriteList for the new word
+                self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["letter_x_center_start"], FOUND_LETTER_SPACE["y_center"])
 
             # setup the next round of letters
             self.setup_letters(self.current_word.current_letter())
