@@ -124,7 +124,8 @@ class TestView(arcade.View):
         self.wall.draw()
         self.word_image.draw()
         self.completed_letters.draw()
-        arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 12, font_name='arial')
+        # Ryan 3/14/2022 - Making the score a bit more noticeable.
+        arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-30, arcade.csscolor.WHITE, 16, font_name='comic')
 
 
     # for game logic
