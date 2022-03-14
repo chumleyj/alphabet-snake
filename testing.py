@@ -162,6 +162,9 @@ class TestView(arcade.View):
             # if at the end of the current word, create a new word
             if self.current_word.word_end():
                 
+                # Increase score by 10 for the successful word
+                self.score +=10
+
                 # clear SpriteLists
                 self.word_image.clear()
                 self.completed_letters.clear()
