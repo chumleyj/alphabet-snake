@@ -37,6 +37,8 @@ class TestView(arcade.View):
         self.word_image = None
         self.current_word = None
         self.database = None
+        # RYAN 3/14/2022 - Variable for how many times the snake has collided with the wrong letters
+        self.badfood_counter = 0
 
         # Initializes sound and music
         self.init_sounds()
@@ -191,6 +193,13 @@ class TestView(arcade.View):
             view = GameOverView()
             self.window.show_view(view)
 
+        # RYAN 3/14/2022 - If the snake collides with 5 wrong letters, ends game
+        if self.badfood_counter == 5:
+            self.media_player.pause()
+            # Brings up Game Over screen
+            view = GameOverView()
+            self.window.show_view(view)
+            
     # handle key press
     def on_key_press(self, symbol, modifiers):
         if (symbol == arcade.key.UP and self.snake.y_speed >= 0):
