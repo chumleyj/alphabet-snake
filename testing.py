@@ -14,6 +14,12 @@ SCREEN_HEIGHT = 800
 SCREEN_TITLE = 'Alphabet Snake'
 TILE_SCALING = 0.5
 SPRITE_SCALING_BOX = 0.5
+LETTER_SPACE = {
+    'x_min': 120,
+    'x_max': SCREEN_WIDTH - 120,
+    'y_min': 320,
+    'y_max': SCREEN_HEIGHT - 70
+}
 FOUND_LETTER_SPACE = {
     'image_x_center': 200, 
     'letter_x_center_start': 300, 
@@ -106,8 +112,8 @@ class TestView(arcade.View):
         self.badfood.clear()
 
         # add next letter to good letter list and other random letters to bad letter list
-        self.goodfood.setup(letter, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
-        self.badfood.setup(letter, FOOD_COUNT, 100, SCREEN_WIDTH - 100, 300, SCREEN_HEIGHT - 50)
+        self.goodfood.setup(letter, LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'], self.snake.snake_list)
+        self.badfood.setup(letter, FOOD_COUNT, LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'], self.goodfood, self.snake.snake_list)
 
 
     # handles drawing for background and sprites
