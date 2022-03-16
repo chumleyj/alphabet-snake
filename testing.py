@@ -131,7 +131,8 @@ class TestView(arcade.View):
         self.word_image.draw()
         self.completed_letters.draw()
         # Ryan 3/14/2022 - Making the score a bit more noticeable.
-        arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-30, arcade.csscolor.WHITE, 16, font_name='comic')
+        arcade.draw_text(f'Lives: {5 - (self.badfood_counter)}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 16, font_name='comic')
+        arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-40, arcade.csscolor.WHITE, 16, font_name='comic')
 
 
     # for game logic
@@ -189,6 +190,7 @@ class TestView(arcade.View):
 
         # If the snake eats bad food, it grows, gives sound effect, and the food disappears
         for food in badfood_collision:
+            self.badfood_counter += 1
             self.snake.grow()
             arcade.play_sound(self.yuck)
             food.remove_from_sprite_lists()
