@@ -54,7 +54,7 @@ class TestView(arcade.View):
         self.yum = arcade.load_sound("sounds/yum.mp3")
         self.yuck = arcade.load_sound("sounds/yuck.mp3")
         self.bg_music = arcade.load_sound("sounds/bg_music.mp3")
-        """Ryan 2/24/2022- loop=True caused issues when player restarted play; removed for now"""
+        self.success_sound = arcade.load_sound("sounds/powerup.mp3")
         self.media_player = self.bg_music.play()
 
     # sets up the game variables
@@ -168,6 +168,8 @@ class TestView(arcade.View):
 
             # if at the end of the current word, create a new word
             if self.current_word.word_end():
+                # Play success sound effect
+                arcade.play_sound(self.success_sound)
                 
                 # Increase score by 10 for the successful word
                 self.score +=10
