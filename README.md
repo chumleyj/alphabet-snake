@@ -38,7 +38,9 @@ This program was developed using PyCharm, Visual Studio Code, and GitHub.
 * [Python Arcade Documentation](https://api.arcade.academy/en/latest/)
 * [W3Schools - Python Tutorial](https://www.w3schools.com/python/default.asp)
 * [The Python Standard Library](https://docs.python.org/3.8/library/index.html)
-* 
+* [Python - sqlite3](https://docs.python.org/3.8/library/sqlite3.html)
+* [SQLite Tutorial](https://www.sqlitetutorial.net/)
+
 # Future Work
 
 {Make a list of things that you need to fix, improve, and add in the future.}
