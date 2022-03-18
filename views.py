@@ -31,7 +31,7 @@ class StartView(arcade.View):
         # Will go to main gameplay once player presses 'P'
         elif (symbol == arcade.key.P):
             arcade.play_sound(self.yum)
-            test_view = testing.TestView()
+            test_view = main.TestView()
             test_view.setup()
             self.window.show_view(test_view)    
             
@@ -55,7 +55,7 @@ class InstructionView(arcade.View):
             self.window.show_view(start_view)
         elif (symbol == arcade.key.P):
             arcade.play_sound(self.yum)
-            test_view = testing.TestView()
+            test_view = main.TestView()
             test_view.setup()
             self.window.show_view(test_view)    
 
@@ -79,7 +79,7 @@ class GameOverView(arcade.View):
     def on_key_press(self, symbol, modifiers):
         # Will go to main gameplay once player presses 'P'
         if (symbol == arcade.key.P):
-            test_view = testing.TestView()
+            test_view = main.TestView()
             self.media_player.pause()
             test_view.setup()
             self.window.show_view(test_view)
