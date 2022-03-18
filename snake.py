@@ -4,14 +4,26 @@ SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 800
 
 """
-This class describes a snake sprite. The snake is a SpriteList of sprites
-that move along the screen in response to user input.
+Class: Snake
+Description: stores information and methods for a SpriteList representing a
+    snake and information such as the snake's size and speed. The snake's 
+    movement is based on it's speed in the x- and y-directions.
+Class Variables:
+    snake_list:
+    num_segments:
+    x_speed:
+    y_speed:
+    head_directions:
+    snake_head:
 """
 class Snake():
+    """
+    Function: init
+    Description:
+    Parameters:
+    """
     def __init__(self, x_start, y_start, segments):
-        """
-        Class Initializer
-        """
+        
         # list of all sprites composing the snake
         self.snake_list = arcade.SpriteList()
 
@@ -21,10 +33,10 @@ class Snake():
         self.y_speed = 0
         
         # load textures for different snake head directions
-        self.head_directions = [arcade.load_texture('snake_images\snake_head_horz.png', width=self.speed, height=self.speed),
-                                arcade.load_texture('snake_images\snake_head_horz.png', flipped_horizontally=True, width=self.speed, height=self.speed),
-                                arcade.load_texture('snake_images\snake_head_vert.png', width=self.speed, height=self.speed),
-                                arcade.load_texture('snake_images\snake_head_vert.png', flipped_vertically=True, width=self.speed, height=self.speed)
+        self.head_directions = [arcade.load_texture('images\snake_images\snake_head_horz.png', width=self.speed, height=self.speed),
+                                arcade.load_texture('images\snake_images\snake_head_horz.png', flipped_horizontally=True, width=self.speed, height=self.speed),
+                                arcade.load_texture('images\snake_images\snake_head_vert.png', width=self.speed, height=self.speed),
+                                arcade.load_texture('images\snake_images\snake_head_vert.png', flipped_vertically=True, width=self.speed, height=self.speed)
         ]
 
         # Ryan - instantiated snake_head
@@ -48,7 +60,7 @@ class Snake():
         # create sprites for snake body segments and add to snake_list
         # head is first element in list, then each segment is appended to ti
         for i in range(0, self.num_segments - 1):
-            segment = arcade.Sprite(filename='snake_images\snake_segment.png', 
+            segment = arcade.Sprite(filename='images\snake_images\snake_segment.png', 
                                         image_height=self.speed,
                                         image_width=self.speed,
                                         center_x=x_start,
@@ -107,7 +119,7 @@ class Snake():
         """
         
         # create new segment sprite
-        new_segment = arcade.Sprite(filename='snake_images\snake_segment.png',
+        new_segment = arcade.Sprite(filename='images\snake_images\snake_segment.png',
                                 image_height=self.speed,
                                 image_width=self.speed,
                                 center_x=0,
