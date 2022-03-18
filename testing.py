@@ -84,8 +84,8 @@ class TestView(arcade.View):
         self.setup_word_image(self.current_word.word_file)
 
         # create SpriteLists for correct and incorrect letters
-        self.goodfood = food.GoodLetterList()
-        self.badfood = food.BadLetterList()
+        self.goodfood = food.GoodLetterList(LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'])
+        self.badfood = food.BadLetterList(LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'])
         self.setup_letters(self.current_word.current_letter())
 
         # create SpriteList to display correctly found letters
@@ -112,8 +112,8 @@ class TestView(arcade.View):
         self.badfood.clear()
 
         # add next letter to good letter list and other random letters to bad letter list
-        self.goodfood.setup(letter, LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'], self.snake.snake_list)
-        self.badfood.setup(letter, FOOD_COUNT, LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'], self.goodfood, self.snake.snake_list)
+        self.goodfood.setup(letter, self.snake.snake_list)
+        self.badfood.setup(letter, FOOD_COUNT, self.goodfood, self.snake.snake_list)
 
 
     # handles drawing for background and sprites
