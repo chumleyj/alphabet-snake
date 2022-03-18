@@ -21,9 +21,9 @@ LETTER_SPACE = {
     'y_max': SCREEN_HEIGHT - 70
 }
 FOUND_LETTER_SPACE = {
-    'image_x_center': 200, 
-    'letter_x_center_start': 300, 
-    'y_center': 170, 
+    'image_x_center': 200,
+    'letter_x_center_start': 300,
+    'y_center': 170,
 }
 
 """Ryan 2/24/2022 - Change from arcade.Window to arcade.View and TestGame to TestView"""
@@ -43,12 +43,14 @@ class TestView(arcade.View):
         self.word_image = None
         self.current_word = None
         self.database = None
+        self.completed_list = []
+        self.previous_word = ""
         # RYAN 3/14/2022 - Variable for how many times the snake has collided with the wrong letters
         self.badfood_counter = 0
 
         # Initializes sound and music
         self.init_sounds()
-        
+
 
     def init_sounds(self):
         self.yum = arcade.load_sound("sounds/yum.mp3")
@@ -59,15 +61,15 @@ class TestView(arcade.View):
 
     # sets up the game variables
     def setup(self):
-        #Creates Database for Users
+        # Creates Database for Users
         self.database = database.create_database()
-        
+
         # setup background image
         self.background = arcade.load_texture("blackboard.jpg")
-        
+
         # create snake Sprite
         self.snake = snake.Snake(105, 295, 7)
-        
+
         # create walls
         self.wall = arcade.SpriteList()
         for x in range(95, 1200, 7):
@@ -78,7 +80,7 @@ class TestView(arcade.View):
 
         # set current word to spell
         self.current_word = word.Word()
-        
+
         # Manually create and position a word image
         self.word_image = arcade.SpriteList()
         self.setup_word_image(self.current_word.word_file)
@@ -95,18 +97,18 @@ class TestView(arcade.View):
 
     # setup current word image sprite
     def setup_word_image(self, filename):
-        
+
         # create sprite for the word image
         word_image_sprite = arcade.Sprite(filename, SPRITE_SCALING_BOX)
         word_image_sprite.center_x = FOUND_LETTER_SPACE["image_x_center"]
         word_image_sprite.center_y = FOUND_LETTER_SPACE["y_center"]
-        
+
         # add to word image SpriteList
         self.word_image.append(word_image_sprite)
-    
+
     # setup new lists of good and bad letters
     def setup_letters(self, letter):
-        
+
         # remove all existing letters from good and bad food
         self.goodfood.clear()
         self.badfood.clear()
@@ -119,11 +121,11 @@ class TestView(arcade.View):
     # handles drawing for background and sprites
     def on_draw(self):
         # clears previous drawing
-        self.clear() 
+        self.clear()
 
         # draws the backgound and snake
         arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH , SCREEN_HEIGHT, self.background)
-        
+
         self.snake.draw()
         self.goodfood.draw()
         self.badfood.draw()
@@ -157,37 +159,63 @@ class TestView(arcade.View):
         for food in goodfood_collision:
             self.score += 1
             arcade.play_sound(self.yum)
-            
+
             # get name of letter found and add it to completed letters
             letter_name = food.letter_name
             self.completed_letters.add_letter(letter_name)
             food.remove_from_sprite_lists()
-            
+
             # increment index of current word
             self.current_word.word_index += 1
 
-            # if at the end of the current word, create a new word
+            # Checks if you've spelled all the word
             if self.current_word.word_end():
+                # Add finished word to completed list
+                self.completed_list.append(self.current_word.word_name)
+                self.previous_word = self.current_word.word_name
+
                 # Play success sound effect
                 arcade.play_sound(self.success_sound)
-                
+
                 # Increase score by 10 for the successful word
-                self.score +=10
+                self.score += 10
 
                 # clear SpriteLists
                 self.word_image.clear()
                 self.completed_letters.clear()
-                
-                # create a new word
-                self.current_word = word.Word()
-                
-                # setup the new word
-                self.setup_word_image(self.current_word.word_file)
 
-                # setup the completed letters SpriteList for the new word
-                self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"], FOUND_LETTER_SPACE["letter_x_center_start"])
+                # Checks if all words from DB have been completed
+                if len(self.completed_list) == total_words():
+                    # Clears the completed list
+                    self.completed_list.clear()
 
-            # setup the next round of letters
+                    # Makes sure the new word is not the last one completed
+                    # Is the solution to prevent the last word in prior list becoming the first in the new empty list
+                    while self.current_word.word_name == self.previous_word:
+                        self.current_word = word.Word()
+
+                    # Sets up the new word
+                    if self.current_word.word_name != self.previous_word:
+                        self.setup_word_image(self.current_word.word_file)
+
+                        # Sets up the completed letters SpriteList for the new word
+                        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"],
+                                                     FOUND_LETTER_SPACE["letter_x_center_start"])
+
+                else:
+                    # Makes sure the new word is not in the list of completed words
+                    while self.current_word.word_name in self.completed_list:
+                        self.current_word = word.Word()
+
+                    # Sets up the new word
+                    if self.current_word.word_name not in self.completed_list:
+                        self.setup_word_image(self.current_word.word_file)
+
+                        # Sets up the completed letters SpriteList for the new word
+                        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"],
+                                                     FOUND_LETTER_SPACE["letter_x_center_start"])
+
+            # Sets up the next round of letters
             self.setup_letters(self.current_word.current_letter())
 
         # If the snake eats bad food, it grows, gives sound effect, and the food disappears
@@ -213,7 +241,7 @@ class TestView(arcade.View):
             # Brings up Game Over screen
             view = GameOverView()
             self.window.show_view(view)
-            
+
     # handle key press
     def on_key_press(self, symbol, modifiers):
         if (symbol == arcade.key.UP and self.snake.y_speed >= 0):
@@ -229,7 +257,7 @@ class TestView(arcade.View):
             self.snake.x_speed = self.snake.speed
             self.snake.y_speed = 0
 
-    
+
     # handle key release
     def on_key_release(self, symbol, modifiers):
         pass
@@ -254,14 +282,14 @@ class StartView(arcade.View):
         # Will go into the instruction screen once the player presses the right arrow key
         if (symbol == arcade.key.RIGHT):
             instruction_view = InstructionView()
-            self.window.show_view(instruction_view)    
+            self.window.show_view(instruction_view)
         # Will go to main gameplay once player presses 'P'
         elif (symbol == arcade.key.P):
             arcade.play_sound(self.yum)
             test_view = TestView()
             test_view.setup()
-            self.window.show_view(test_view)    
-            
+            self.window.show_view(test_view)
+
 # Commands while in the InstructionView
 class InstructionView(arcade.View):
 
@@ -284,7 +312,7 @@ class InstructionView(arcade.View):
             arcade.play_sound(self.yum)
             test_view = TestView()
             test_view.setup()
-            self.window.show_view(test_view)    
+            self.window.show_view(test_view)
 
 """Ryan 3/10/2022 - added music for GameOverView"""
 # Screen and music that starts once a player dies
@@ -309,7 +337,7 @@ class GameOverView(arcade.View):
             self.media_player.pause()
             test_view = TestView()
             test_view.setup()
-            self.window.show_view(test_view)    
+            self.window.show_view(test_view)
 
 def main():
     """Ryan 2/24/2022 - changed this stuff from windows to views"""

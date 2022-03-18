@@ -54,3 +54,9 @@ def select_word():
     selected_word = game_words[word_id]
 
     return selected_word
+
+
+def total_words():
+    game_words_list = get_words()
+
+    return len(game_words_list)
