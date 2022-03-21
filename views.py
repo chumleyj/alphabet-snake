@@ -5,9 +5,6 @@ import main
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 800
 
-"""Ryan 2/24/2022 - Change from arcade.Window to arcade.View and TestGame to TestView"""
-
-"""Ryan 3/9/2022- Updated StartView"""
 # Class for the starting view that will show once a user loads the game
 class StartView(arcade.View):
 
