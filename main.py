@@ -65,7 +65,7 @@ class TestView(arcade.View):
         self.database = database.create_database()
 
         # setup background image
-        self.background = arcade.load_texture("blackboard.jpg")
+        self.background = arcade.load_texture("images/blackboard.jpg")
 
         # create snake Sprite
         self.snake = snake.Snake(105, 295, 7)
