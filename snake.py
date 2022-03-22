@@ -39,7 +39,6 @@ class Snake():
                                 arcade.load_texture('images\snake_images\snake_head_vert.png', flipped_vertically=True, width=self.speed, height=self.speed)
         ]
 
-        # Ryan - instantiated snake_head
         # create sprite for snake head and add to snake_list
         self.snake_head = arcade.Sprite(image_height=self.speed,
                                    image_width=self.speed,
@@ -49,11 +48,8 @@ class Snake():
         )
         # add textures to snake_head
         for texture in self.head_directions:
-            # Ryan - instantiated snake_head
             self.snake_head.append_texture(texture)
-        # Ryan - instantiated snake_head
         self.snake_head.set_texture(0)
-        # Ryan - instantiated snake_head
         self.snake_list.append(self.snake_head)
         x_start -= self.speed
 
@@ -106,7 +102,6 @@ class Snake():
         elif self.y_speed < 0:
             self.snake_list[0].set_texture(3)
 
-        """Ryan 2/25/2022 - updated to new parameters"""
         # check if reached edge of screen and force to turn around
         if self.snake_list[0].center_x >= (SCREEN_WIDTH - 100) or self.snake_list[0].center_x <= 100:
             self.x_speed *= -1
