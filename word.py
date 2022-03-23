@@ -7,10 +7,10 @@ Description: Stores information and methods for both an image and string
     screen, allowing a user to spell out the word that is represented by
     the image shown on the screen.
 Class Variables:
-    word_name:
-    word_array:
-    word_index:
-    word_file:
+    word_name: stores a string representing this word.
+    word_array: an array of letters representing this word.
+    word_index: stores the current letter position 
+    word_file: stores the filepath to an image for the sprite.
 """
 class Word():
     """
