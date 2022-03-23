@@ -34,7 +34,6 @@ class TestView(arcade.View):
     """
     def __init__(self):
         # call Window class initializer
-        """Ryan 2/24/2022 - Remove width, height, title, resizable=False"""
         super().__init__()
         self.background = None
         self.score = 0
@@ -48,7 +47,7 @@ class TestView(arcade.View):
         self.database = None
         self.completed_list = []
         self.previous_word = ""
-        # RYAN 3/14/2022 - Variable for how many times the snake has collided with the wrong letters
+        # Variable for how many times the snake has collided with the wrong letters
         self.badfood_counter = 0
 
         # Initializes sound and music
@@ -154,7 +153,7 @@ class TestView(arcade.View):
         self.wall.draw()
         self.word_image.draw()
         self.completed_letters.draw()
-        # Ryan 3/14/2022 - Making the score a bit more noticeable.
+        # Displays the current score and the number of remaining lives.
         arcade.draw_text(f'Lives: {5 - (self.badfood_counter)}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 16, font_name='comic')
         arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-40, arcade.csscolor.WHITE, 16, font_name='comic')
 
@@ -253,14 +252,13 @@ class TestView(arcade.View):
         # If snake collides with itself or the game boundaries, the game quits
         if len(snake_collision) > 0 or self.snake.snake_head.center_x >= LETTER_SPACE['x_max'] or self.snake.snake_head.center_x <= LETTER_SPACE['x_min'] or self.snake.snake_head.center_y >= LETTER_SPACE['y_max'] or self.snake.snake_head.center_y <= LETTER_SPACE['y_min']:
             arcade.play_sound(self.yuck)
-            """Ryan 2/24/2022 - Updated"""
             # Stops music when player dies
             self.media_player.pause()
             # Brings up Game Over screen
             view = GameOverView()
             self.window.show_view(view)
 
-        # RYAN 3/14/2022 - If the snake collides with 5 wrong letters, ends game
+        # If the snake collides with 5 wrong letters, ends game
         if self.badfood_counter == 5:
             self.media_player.pause()
             # Brings up Game Over screen
@@ -287,8 +285,6 @@ class TestView(arcade.View):
             self.snake.x_speed = self.snake.speed
             self.snake.y_speed = 0
 
-
-"""Ryan 3/9/2022- Updated StartView"""
 # Class for the starting view that will show once a user loads the game
 class StartView(arcade.View):
 
@@ -340,7 +336,6 @@ class InstructionView(arcade.View):
             test_view.setup()
             self.window.show_view(test_view)
 
-"""Ryan 3/10/2022 - added music for GameOverView"""
 # Screen and music that starts once a player dies
 class GameOverView(arcade.View):
     def __init__(self):
@@ -366,7 +361,6 @@ class GameOverView(arcade.View):
             self.window.show_view(test_view)
 
 def main():
-    """Ryan 2/24/2022 - changed this stuff from windows to views"""
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
     window.center_window()
     start_view = StartView()
