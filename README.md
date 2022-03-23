@@ -30,7 +30,7 @@ This program was developed using PyCharm, Visual Studio Code, and GitHub.
 * Avery Crowson
 * Jeffrey Chumley - chumleyj@gmail.com
 * Brad Howard - howardbrad33@gmail.com
-* Erik Alcala
+* Erik Alcala - erikalcala06@gmail.com
 
 # Useful Websites
 

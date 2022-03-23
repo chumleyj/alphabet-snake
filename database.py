@@ -23,7 +23,12 @@ def create_database():
         (3, 'Cat'),
         (4, 'Clock'),
         (5, 'Hat'),
-        (6, 'House')
+        (6, 'House'),
+        (7, 'Pig'),
+        (8, 'Table'),
+        (9, 'Baseball'),
+        (10, 'Car'),
+        (11, 'Chair')
     ]
     mycursor.executemany("INSERT INTO game_words VALUES (?,?)", insert_words)
 
