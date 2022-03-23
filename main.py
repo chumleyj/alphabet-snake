@@ -26,9 +26,12 @@ FOUND_LETTER_SPACE = {
     'y_center': 170,
 }
 
-"""Ryan 2/24/2022 - Change from arcade.Window to arcade.View and TestGame to TestView"""
+
 class TestView(arcade.View):
-    """Ryan 2/24/2022 - Remove width, height, title from __init__"""
+    """
+    Function: init
+    Description: 
+    """
     def __init__(self):
         # call Window class initializer
         """Ryan 2/24/2022 - Remove width, height, title, resizable=False"""
@@ -36,8 +39,8 @@ class TestView(arcade.View):
         self.background = None
         self.score = 0
         self.snake = None
-        self.goodfood = None
-        self.badfood = None
+        self.good_food = None
+        self.bad_food = None
         self.completed_letters = None
         self.wall = None
         self.word_image = None
@@ -51,15 +54,21 @@ class TestView(arcade.View):
         # Initializes sound and music
         self.init_sounds()
 
-
+    """
+    Function: init_sounds
+    Description: loads sounds used in the game and starts the background music
+    """
     def init_sounds(self):
         self.yum = arcade.load_sound("sounds/yum.mp3")
         self.yuck = arcade.load_sound("sounds/yuck.mp3")
         self.bg_music = arcade.load_sound("sounds/bg_music.mp3")
         self.success_sound = arcade.load_sound("sounds/powerup.mp3")
-        self.media_player = self.bg_music.play()
+        self.media_player = self.bg_music.play(loop=True)
 
-    # sets up the game variables
+    """
+    Function: setup
+    Description: sets up the game variables
+    """
     def setup(self):
         # Creates Database for Users
         self.database = database.create_database()
@@ -68,7 +77,7 @@ class TestView(arcade.View):
         self.background = arcade.load_texture("images/blackboard.jpg")
 
         # create snake Sprite
-        self.snake = snake.Snake(200, 320, 10)
+        self.snake = snake.Snake(260, 320, 15)
 
         # create walls
         self.wall = arcade.SpriteList()
@@ -86,16 +95,21 @@ class TestView(arcade.View):
         self.setup_word_image(self.current_word.word_file)
 
         # create SpriteLists for correct and incorrect letters
-        self.goodfood = food.GoodLetterList(LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'])
-        self.badfood = food.BadLetterList(LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'])
+        self.good_food = food.GoodLetterList(LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'])
+        self.bad_food = food.BadLetterList(LETTER_SPACE['x_min'], LETTER_SPACE['x_max'], LETTER_SPACE['y_min'], LETTER_SPACE['y_max'])
         self.setup_letters(self.current_word.current_letter())
 
         # create SpriteList to display correctly found letters
         self.completed_letters = food.CompletedLetterList()
         self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"], FOUND_LETTER_SPACE["letter_x_center_start"])
 
-
-    # setup current word image sprite
+    """
+    Function: setup_word_image
+    Description: creates a Sprite for an image representing the word
+        the player should spell.
+    Parameters: 
+        filename: filename of an image used for the sprite
+    """
     def setup_word_image(self, filename):
 
         # create sprite for the word image
@@ -106,19 +120,27 @@ class TestView(arcade.View):
         # add to word image SpriteList
         self.word_image.append(word_image_sprite)
 
-    # setup new lists of good and bad letters
+    """
+    Function: setup_letters
+    Description: Updates good_food and bad_food SpriteLists with new
+        letters.
+    Parameters:
+        letter: the letter to add to good_food and to not add to bad_food.
+    """
     def setup_letters(self, letter):
 
         # remove all existing letters from good and bad food
-        self.goodfood.clear()
-        self.badfood.clear()
+        self.good_food.clear()
+        self.bad_food.clear()
 
         # add next letter to good letter list and other random letters to bad letter list
-        self.goodfood.setup(letter, self.snake.snake_list)
-        self.badfood.setup(letter, FOOD_COUNT, self.goodfood, self.snake.snake_list)
+        self.good_food.setup(letter, self.snake.snake_list)
+        self.bad_food.setup(letter, FOOD_COUNT, self.good_food, self.snake.snake_list)
 
-
-    # handles drawing for background and sprites
+    """
+    Function: on_draw
+    Description: draws the background, score, lives, and all Sprites in the game
+    """
     def on_draw(self):
         # clears previous drawing
         self.clear()
@@ -127,8 +149,8 @@ class TestView(arcade.View):
         arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH , SCREEN_HEIGHT, self.background)
 
         self.snake.draw()
-        self.goodfood.draw()
-        self.badfood.draw()
+        self.good_food.draw()
+        self.bad_food.draw()
         self.wall.draw()
         self.word_image.draw()
         self.completed_letters.draw()
@@ -136,26 +158,20 @@ class TestView(arcade.View):
         arcade.draw_text(f'Lives: {5 - (self.badfood_counter)}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 16, font_name='comic')
         arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-40, arcade.csscolor.WHITE, 16, font_name='comic')
 
-
-    # for game logic
+    """
+    Function: on_update
+    Description: Updates position of the snake and handles collisions between
+        the snake and good_food, bad_food, itself, or the boundary of the game
+    """
     def on_update(self, delta_time):
+        # update the position of the snake
         self.snake.update()
 
-        ### ADD CHECK TO SEE IF SNAKE HAS LEFT GAME AREA (end game)
-
-        """Jeff - updated collision handling"""
+        # identify any collisions between the snake and good_food Sprites
         for seg in self.snake.snake_list:
-            goodfood_collision = arcade.check_for_collision_with_list(seg, self.goodfood)
+            goodfood_collision = arcade.check_for_collision_with_list(seg, self.good_food)
             if goodfood_collision:
                 break
-
-        for seg in self.snake.snake_list:
-            badfood_collision = arcade.check_for_collision_with_list(seg, self.badfood)
-            if badfood_collision:
-                break
-
-        # Checks if the snake collides with itself
-        snake_collision = arcade.check_for_collision_with_list(self.snake.snake_head, self.snake.snake_list)
 
         # If the snake eats good food, score increases, gives sound effect, and all food resets        
         for food in goodfood_collision:
@@ -192,17 +208,15 @@ class TestView(arcade.View):
                     self.completed_list.clear()
 
                     # Makes sure the new word is not the last one completed
-                    # Is the solution to prevent the last word in prior list becoming the first in the new empty list
                     while self.current_word.word_name == self.previous_word:
                         self.current_word = word.Word()
 
                     # Sets up the new word
-                    if self.current_word.word_name != self.previous_word:
-                        self.setup_word_image(self.current_word.word_file)
+                    self.setup_word_image(self.current_word.word_file)
 
-                        # Sets up the completed letters SpriteList for the new word
-                        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"],
-                                                     FOUND_LETTER_SPACE["letter_x_center_start"])
+                    # Sets up the completed letters SpriteList for the new word
+                    self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"],
+                                                    FOUND_LETTER_SPACE["letter_x_center_start"])
 
                 else:
                     # Makes sure the new word is not in the list of completed words
@@ -210,15 +224,20 @@ class TestView(arcade.View):
                         self.current_word = word.Word()
 
                     # Sets up the new word
-                    if self.current_word.word_name not in self.completed_list:
-                        self.setup_word_image(self.current_word.word_file)
+                    self.setup_word_image(self.current_word.word_file)
 
-                        # Sets up the completed letters SpriteList for the new word
-                        self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"],
-                                                     FOUND_LETTER_SPACE["letter_x_center_start"])
+                    # Sets up the completed letters SpriteList for the new word
+                    self.completed_letters.setup(self.current_word.word_length(), FOUND_LETTER_SPACE["y_center"],
+                                                    FOUND_LETTER_SPACE["letter_x_center_start"])
 
             # Sets up the next round of letters
             self.setup_letters(self.current_word.current_letter())
+
+        # identify any collisions between the snake and bad_food Sprites
+        for seg in self.snake.snake_list:
+            badfood_collision = arcade.check_for_collision_with_list(seg, self.bad_food)
+            if badfood_collision:
+                break
 
         # If the snake eats bad food, it grows, gives sound effect, and the food disappears
         for food in badfood_collision:
@@ -227,8 +246,11 @@ class TestView(arcade.View):
             arcade.play_sound(self.yuck)
             food.remove_from_sprite_lists()
 
-        # If snake collides with itself, the game quits
-        #for seg in snake_collision:
+        # Checks if the snake collides with itself
+        snake_collision = arcade.check_for_collision_with_list(self.snake.snake_head, self.snake.snake_list)
+
+        ### (THIS IS CLUNKY - UPDATE) ###
+        # If snake collides with itself or the game boundaries, the game quits
         if len(snake_collision) > 0 or self.snake.snake_head.center_x >= LETTER_SPACE['x_max'] or self.snake.snake_head.center_x <= LETTER_SPACE['x_min'] or self.snake.snake_head.center_y >= LETTER_SPACE['y_max'] or self.snake.snake_head.center_y <= LETTER_SPACE['y_min']:
             arcade.play_sound(self.yuck)
             """Ryan 2/24/2022 - Updated"""
@@ -245,7 +267,12 @@ class TestView(arcade.View):
             view = GameOverView()
             self.window.show_view(view)
 
-    # handle key press
+    """
+    Function: on_key_press
+    Description: Updates the movement of the snake based on keyboard input.
+    Parameters:
+        symbol: represents the key pressed
+    """
     def on_key_press(self, symbol, modifiers):
         if (symbol == arcade.key.UP and self.snake.y_speed >= 0):
             self.snake.x_speed = 0
@@ -260,10 +287,6 @@ class TestView(arcade.View):
             self.snake.x_speed = self.snake.speed
             self.snake.y_speed = 0
 
-
-    # handle key release
-    def on_key_release(self, symbol, modifiers):
-        pass
 
 """Ryan 3/9/2022- Updated StartView"""
 # Class for the starting view that will show once a user loads the game
@@ -283,7 +306,7 @@ class StartView(arcade.View):
     # Commands while in the StartView
     def on_key_press(self, symbol, modifiers):
         # Will go into the instruction screen once the player presses the right arrow key
-        if (symbol == arcade.key.RIGHT):
+        if (symbol == arcade.key.I):
             instruction_view = InstructionView()
             self.window.show_view(instruction_view)
         # Will go to main gameplay once player presses 'P'
@@ -323,7 +346,7 @@ class GameOverView(arcade.View):
     def __init__(self):
         super().__init__()
         self.bg_music = arcade.load_sound("sounds/chopin_funeral_march.mp3")
-        self.media_player = self.bg_music.play()
+        self.media_player = self.bg_music.play(loop=True)
         # Background image that populates once the player dies
         self.texture = arcade.load_texture("images/game_over.jpg")
 
