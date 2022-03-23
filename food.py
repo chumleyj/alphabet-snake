@@ -34,14 +34,15 @@ Class Variables:
 class GoodLetterList(arcade.SpriteList):
     """
     Function: init
-    Description: Initializes SpriteList instance and sets boundary variables.
+    Description: Initializes SpriteList instance and sets boundary variables
+        with some extra space around boundaries.
     """
     def __init__(self, x_min, x_max, y_min, y_max):
         super().__init__()
-        self.x_min = x_min
-        self.x_max = x_max
-        self.y_min = y_min
-        self.y_max = y_max
+        self.x_min = x_min + 20
+        self.x_max = x_max - 20
+        self.y_min = y_min + 20
+        self.y_max = y_max - 20
 
     """
     Function: setup
@@ -81,14 +82,15 @@ Class Variables:
 class BadLetterList(arcade.SpriteList):
     """
     Function: init
-    Description: Initializes SpriteList instance and sets boundary variables.
+    Description: Initializes SpriteList instance and sets boundary variables
+        with some extra space around boundaries.
     """
     def __init__(self, x_min, x_max, y_min, y_max):
         super().__init__()
-        self.x_min = x_min
-        self.x_max = x_max
-        self.y_min = y_min
-        self.y_max = y_max
+        self.x_min = x_min + 20
+        self.x_max = x_max - 20
+        self.y_min = y_min + 20
+        self.y_max = y_max - 20
         self.letter_count = None
     
     """

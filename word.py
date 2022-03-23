@@ -23,6 +23,7 @@ class Word():
         self.word_array = self.word_array(self.word_name)
         self.word_index = 0
         self.word_file = "images/wordImages/" + self.word_name.lower() + ".png"
+    
     """
     Function: word_array
     Description: Creates and returns an array from the string of letters that spells
@@ -33,6 +34,7 @@ class Word():
     def word_array(self, word):
         wordArray = [x for x in word]
         return wordArray
+    
     """
     Function: current_letter
     Description: Identifies the current letter of the word based on the specified
@@ -42,12 +44,14 @@ class Word():
     """
     def current_letter(self):
         return self.word_array[self.word_index]
+    
     """
     Function: word_length
     Description: Identifies the length of the specified word.
     """
     def word_length(self):
         return len(self.word_name)
+    
     """
     Function: word_end
     Description: Identifies when the user has iterated to the end of the current

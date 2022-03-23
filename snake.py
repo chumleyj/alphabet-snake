@@ -1,43 +1,47 @@
 import arcade
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 800
-
 """
 Class: Snake
 Description: stores information and methods for a SpriteList representing a
     snake and information such as the snake's size and speed. The snake's 
     movement is based on it's speed in the x- and y-directions.
 Class Variables:
-    snake_list:
-    num_segments:
-    x_speed:
-    y_speed:
-    head_directions:
-    snake_head:
+    snake_list: arcade SpriteList for pieces of the snake.
+    num_segments: the number of body segments in the snake.
+    speed: the speed the snake can travel in either x- or y-directions.
+    x_speed: speed of the snake's head in x-direction.
+    y_speed: speed of the snake's head in y-direction.
+    head_directions: list of arcade textures for snake's head pointing in 
+        different directions.
+    snake_head: the Sprite in the snake_list that is the snake's head.
 """
 class Snake():
     """
     Function: init
-    Description:
+    Description: Initializes class variables and creates the Sprites that
+        compose the Snake.
     Parameters:
+        x_start: x-coordinate for placement of the first Sprite in the snake
+        y_start: y-coordinate for placement of the first Sprite in the snake
+        segments: number of body segments to create in the snake
     """
     def __init__(self, x_start, y_start, segments):
         
-        # list of all sprites composing the snake
+        # SpriteList for Sprites comprising the snake
         self.snake_list = arcade.SpriteList()
 
+        # set class variables
         self.num_segments = segments
         self.speed = 10
+        # snake starts movement in x-direction
         self.x_speed = self.speed
         self.y_speed = 0
         
-        # load textures for different snake head directions
+        # load textures for snake head directions
         self.head_directions = [arcade.load_texture('images\snake_images\snake_head_horz.png', width=self.speed, height=self.speed),
                                 arcade.load_texture('images\snake_images\snake_head_horz.png', flipped_horizontally=True, width=self.speed, height=self.speed),
                                 arcade.load_texture('images\snake_images\snake_head_vert.png', width=self.speed, height=self.speed),
-                                arcade.load_texture('images\snake_images\snake_head_vert.png', flipped_vertically=True, width=self.speed, height=self.speed)
-        ]
+                                arcade.load_texture('images\snake_images\snake_head_vert.png', flipped_vertically=True, width=self.speed, height=self.speed)]
 
         # create sprite for snake head and add to snake_list
         self.snake_head = arcade.Sprite(image_height=self.speed,
@@ -46,15 +50,19 @@ class Snake():
                                    center_y=y_start,
                                    hit_box_algorithm='Simple'
         )
-        # add textures to snake_head
+        # add snake head textures to snake_head Sprite
         for texture in self.head_directions:
             self.snake_head.append_texture(texture)
+        
+        # set starting texture and add snake_head to SpriteList
         self.snake_head.set_texture(0)
         self.snake_list.append(self.snake_head)
+        
+        # update starting x-coordinate for next Sprite
         x_start -= self.speed
 
         # create sprites for snake body segments and add to snake_list
-        # head is first element in list, then each segment is appended to ti
+        # head is first element in list, then each segment is appended to it
         for i in range(0, self.num_segments - 1):
             segment = arcade.Sprite(filename='images\snake_images\snake_segment.png', 
                                         image_height=self.speed,
@@ -66,33 +74,35 @@ class Snake():
             self.snake_list.append(segment)
             x_start -= self.speed
 
-        # set direction for each segment
+        # set x,y direction for each segment
         for seg in self.snake_list:
             seg.change_x = self.x_speed
             seg.change_y = self.y_speed
     
+    """
+    Function: update
+    Description: Updates the position and direction of movement for each
+        Sprite comprising the snake.
+    """
     def update(self):
-        """
-        Update the position of the snake sprite and handle interacting with the game border
-        """
-
-        # loop through snake sprites backwards. Make the speed in each direction 
-        # (change_x and change_y) equal to the speed of the segment one index 
-        # closer to the head. Then add speed in each direction to the position
+        # loop through snake_list Sprites backwards. 
         for i in range(len(self.snake_list) - 1, 0, -1):
+            # Make the Sprite's speed in each direction (change_x and change_y) 
+            # equal to the speed of the segment one index closer to the head.
             self.snake_list[i].change_x = self.snake_list[i - 1].change_x
             self.snake_list[i].change_y = self.snake_list[i - 1].change_y
+            # Update the position of the Sprite based on its speed in each direction
             self.snake_list[i].center_x += self.snake_list[i].change_x
             self.snake_list[i].center_y += self.snake_list[i].change_y
             
-        # update the snake head sprite's speed in each direction then update
-        # its position
+        # update snake_head sprite's speed in each direction
         self.snake_list[0].change_x = self.x_speed
         self.snake_list[0].change_y = self.y_speed
+        # Update position of snake_head based on its speed in each direction
         self.snake_list[0].center_x += self.snake_list[0].change_x
         self.snake_list[0].center_y += self.snake_list[0].change_y
 
-        # orient snake head sprite based on direction of travel
+        # update texture for snake_head sprite based on direction of travel
         if self.x_speed > 0:
             self.snake_list[0].set_texture(0)
         elif self.x_speed < 0:
@@ -102,17 +112,11 @@ class Snake():
         elif self.y_speed < 0:
             self.snake_list[0].set_texture(3)
 
-        # check if reached edge of screen and force to turn around
-        if self.snake_list[0].center_x >= (SCREEN_WIDTH - 100) or self.snake_list[0].center_x <= 100:
-            self.x_speed *= -1
-        if self.snake_list[0].center_y >= (SCREEN_HEIGHT - 50) or self.snake_list[0].center_y <= 300:
-            self.y_speed *= -1
-
+    """
+    Function: grow
+    Description: Adds a body segment Sprite to the end of the  SpriteList
+    """
     def grow(self):
-        """"
-        Add a body segment to the end of the snake
-        """
-        
         # create new segment sprite
         new_segment = arcade.Sprite(filename='images\snake_images\snake_segment.png',
                                 image_height=self.speed,
@@ -143,8 +147,9 @@ class Snake():
         self.snake_list.append(new_segment)
         self.num_segments += 1
 
+    """
+    Function: draw
+    Description: Draws all sprites in the snake_list SpriteList
+    """
     def draw(self):
-        """
-        Draw the sprites in the snake SpriteList
-        """
         self.snake_list.draw()
