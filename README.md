@@ -16,10 +16,9 @@ Good luck!
 
 # Development Environment
 
-{Describe the tools that you used to develop the software}
 This program was developed using PyCharm, Visual Studio Code, and GitHub. 
 
-{Describe the programming language that you used and any libraries.}
+This software was developed using the following programming languages and libraries:
 * Python 3.10
 * Arcade 2.6.10
 * SQLite
@@ -34,7 +33,6 @@ This program was developed using PyCharm, Visual Studio Code, and GitHub.
 
 # Useful Websites
 
-{Make a list of websites that you found helpful in this project}
 * [Python Arcade Documentation](https://api.arcade.academy/en/latest/)
 * [W3Schools - Python Tutorial](https://www.w3schools.com/python/default.asp)
 * [The Python Standard Library](https://docs.python.org/3.8/library/index.html)
@@ -43,7 +41,7 @@ This program was developed using PyCharm, Visual Studio Code, and GitHub.
 
 # Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
-* Item 1
-* Item 2
-* Item 3
+* Add option to adjust the speed at which the snake travels in order to increase or decrease difficulty.
+* Increase the number of potential words and create levels of difficulty. This would be done by grouping words by length and diffiuclty.
+* Record the high scores of individual players, which can then be saved and displayed as a scoreboard when the game is started.
+* Create randomized walls and barriers to increase the difficulty of play.
