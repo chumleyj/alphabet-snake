@@ -17,8 +17,8 @@ SPRITE_SCALING_BOX = 0.5
 LETTER_SPACE = {
     'x_min': 92,
     'x_max': SCREEN_WIDTH - 75,
-    'y_min': 300,
-    'y_max': SCREEN_HEIGHT - 50
+    'y_min': 285,
+    'y_max': SCREEN_HEIGHT - 40
 }
 FOUND_LETTER_SPACE = {
     'image_x_center': 200,
