@@ -75,7 +75,7 @@ class InstructionView(arcade.View):
     Description: Creates the resources that will be used in the StartView.
     """
     def on_show(self):
-        self.background = arcade.load_texture("images/instruction_screen.gif")
+        self.background = arcade.load_texture("images/instruction_screen.jpg")
         self.yum = arcade.load_sound("sounds/yum.mp3")
     """
     Function: on_draw
