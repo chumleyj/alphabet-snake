@@ -6,34 +6,37 @@ import word
 from database import *
 from time import sleep
 
-# Defines the number of bad_food items
-FOOD_COUNT = 10
-
+"""
+Constants used in the game
+"""
+BAD_LETTER_COUNT = 10 # number of bad_food items to display
+SCREEN_TITLE = 'Alphabet Snake'
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 800
-SCREEN_TITLE = 'Alphabet Snake'
-TILE_SCALING = 0.5
-SPRITE_SCALING_BOX = 0.5
-LETTER_SPACE = {
+SPRITE_SCALING_BOX = 0.5 # scales wall Sprites
+LETTER_SPACE = { # defines boundaries of where letters can be placed
     'x_min': 92,
     'x_max': SCREEN_WIDTH - 75,
     'y_min': 285,
-    'y_max': SCREEN_HEIGHT - 40
-}
-FOUND_LETTER_SPACE = {
+    'y_max': SCREEN_HEIGHT - 40}
+FOUND_LETTER_SPACE = { # defines location to display found letters
     'image_x_center': 200,
     'letter_x_center_start': 300,
-    'y_center': 170,
-}
+    'y_center': 170}
 
-
-class TestView(arcade.View):
+"""
+Class: GameView
+Description: Extension of the arcade View class. Contains all variables
+    and methods used to play the game.
+"""
+class GameView(arcade.View):
     """
     Function: init
-    Description: 
+    Description: Initializes View and sets class variables to
+        None. Loads sounds and music.
     """
     def __init__(self):
-        # call Window class initializer
+        # call View class initializer
         super().__init__()
         self.background = None
         self.score = 0
@@ -48,7 +51,7 @@ class TestView(arcade.View):
         self.completed_list = []
         self.previous_word = ""
         # Variable for how many times the snake has collided with the wrong letters
-        self.badfood_counter = 0
+        self.bad_food_counter = 0
 
         # Initializes sound and music
         self.init_sounds()
@@ -134,7 +137,7 @@ class TestView(arcade.View):
 
         # add next letter to good letter list and other random letters to bad letter list
         self.good_food.setup(letter, self.snake.snake_list)
-        self.bad_food.setup(letter, FOOD_COUNT, self.good_food, self.snake.snake_list)
+        self.bad_food.setup(letter, BAD_LETTER_COUNT, self.good_food, self.snake.snake_list)
 
     """
     Function: on_draw
@@ -144,23 +147,23 @@ class TestView(arcade.View):
         # clears previous drawing
         self.clear()
 
-        # draws the backgound and snake
+        # draws the backgound and and all Sprites
         arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH , SCREEN_HEIGHT, self.background)
-
         self.snake.draw()
         self.good_food.draw()
         self.bad_food.draw()
         self.wall.draw()
         self.word_image.draw()
         self.completed_letters.draw()
+
         # Displays the current score and the number of remaining lives.
-        arcade.draw_text(f'Lives: {5 - (self.badfood_counter)}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 16, font_name='comic')
+        arcade.draw_text(f'Lives: {5 - (self.bad_food_counter)}', 20, SCREEN_HEIGHT-20, arcade.csscolor.WHITE, 16, font_name='comic')
         arcade.draw_text(f'Score: {self.score}', 20, SCREEN_HEIGHT-40, arcade.csscolor.WHITE, 16, font_name='comic')
 
     """
     Function: on_update
     Description: Updates position of the snake and handles collisions between
-        the snake and good_food, bad_food, itself, or the boundary of the game
+        the snake and good_food, bad_food, itself, or the boundary of the game.
     """
     def on_update(self, delta_time):
         # update the position of the snake
@@ -240,7 +243,7 @@ class TestView(arcade.View):
 
         # If the snake eats bad food, it grows, gives sound effect, and the food disappears
         for food in badfood_collision:
-            self.badfood_counter += 1
+            self.bad_food_counter += 1
             self.snake.grow()
             arcade.play_sound(self.yuck)
             food.remove_from_sprite_lists()
@@ -259,7 +262,7 @@ class TestView(arcade.View):
             self.window.show_view(view)
 
         # If the snake collides with 5 wrong letters, ends game
-        if self.badfood_counter == 5:
+        if self.bad_food_counter == 5:
             self.media_player.pause()
             # Brings up Game Over screen
             view = GameOverView()
@@ -285,6 +288,12 @@ class TestView(arcade.View):
             self.snake.x_speed = self.snake.speed
             self.snake.y_speed = 0
 
+"""
+Class: StartView
+Description: Extension of the arcade View class. Contains content
+    displayed on the startup screen for the game. Also handles
+    user input while on this screen.
+"""
 # Class for the starting view that will show once a user loads the game
 class StartView(arcade.View):
 
@@ -302,17 +311,22 @@ class StartView(arcade.View):
     # Commands while in the StartView
     def on_key_press(self, symbol, modifiers):
         # Will go into the instruction screen once the player presses the right arrow key
-        if (symbol == arcade.key.I):
+        if (symbol == arcade.key.RIGHT):
             instruction_view = InstructionView()
             self.window.show_view(instruction_view)
         # Will go to main gameplay once player presses 'P'
         elif (symbol == arcade.key.P):
             arcade.play_sound(self.yum)
-            test_view = TestView()
+            test_view = GameView()
             test_view.setup()
             self.window.show_view(test_view)
 
-# Commands while in the InstructionView
+"""
+Class: InstructionView
+Description: Extension of the arcade View class. Contains content
+    displayed on the instruction screen for the game. Also handles
+    user input while on this screen.
+"""
 class InstructionView(arcade.View):
 
     def on_show(self):
@@ -332,11 +346,16 @@ class InstructionView(arcade.View):
             self.window.show_view(start_view)
         elif (symbol == arcade.key.P):
             arcade.play_sound(self.yum)
-            test_view = TestView()
+            test_view = GameView()
             test_view.setup()
             self.window.show_view(test_view)
 
-# Screen and music that starts once a player dies
+"""
+Class: GameOverView
+Description: Extension of the arcade View class. Contains content
+    displayed when the player loses the game. Also handles
+    user input while on this screen.
+"""
 class GameOverView(arcade.View):
     def __init__(self):
         super().__init__()
@@ -356,9 +375,10 @@ class GameOverView(arcade.View):
         # Will go to main gameplay once player presses 'P'
         if (symbol == arcade.key.P):
             self.media_player.pause()
-            test_view = TestView()
+            test_view = GameView()
             test_view.setup()
             self.window.show_view(test_view)
+
 
 def main():
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
