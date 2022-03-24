@@ -92,7 +92,7 @@ class InstructionView(arcade.View):
         symbol: a key that is pressed by the user to interact with the game.
     """
     def on_key_press(self, symbol, modifiers):
-        if (symbol == arcade.key.LEFT):
+        if (symbol == arcade.key.S):
             start_view = StartView()
             self.window.show_view(start_view)
         elif (symbol == arcade.key.P):
