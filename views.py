@@ -51,7 +51,7 @@ class StartView(arcade.View):
         # Will go to main gameplay once player presses 'P'
         elif (symbol == arcade.key.P):
             arcade.play_sound(self.yum)
-            test_view = main.TestView()
+            test_view = main.GameView()
             test_view.setup()
             self.window.show_view(test_view)    
             
@@ -97,7 +97,7 @@ class InstructionView(arcade.View):
             self.window.show_view(start_view)
         elif (symbol == arcade.key.P):
             arcade.play_sound(self.yum)
-            test_view = main.TestView()
+            test_view = main.GameView()
             test_view.setup()
             self.window.show_view(test_view)    
 
@@ -122,7 +122,7 @@ class GameOverView(arcade.View):
     def __init__(self):
         super().__init__()
         self.bg_music = arcade.load_sound("sounds/chopin_funeral_march.mp3")
-        self.media_player = self.bg_music.play()
+        self.media_player = self.bg_music.play(loop=True)
         # Background image that populates once the player dies
         self.texture = arcade.load_texture("images/game_over.jpg")
     """
@@ -143,7 +143,7 @@ class GameOverView(arcade.View):
     def on_key_press(self, symbol, modifiers):
         # Will go to main gameplay once player presses 'P'
         if (symbol == arcade.key.P):
-            test_view = main.TestView()
+            test_view = main.GameView()
             self.media_player.pause()
             test_view.setup()
             self.window.show_view(test_view)
