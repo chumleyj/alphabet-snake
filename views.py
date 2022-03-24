@@ -44,11 +44,11 @@ class StartView(arcade.View):
         symbol: a key that is pressed by the user to interact with the game.
     """
     def on_key_press(self, symbol, modifiers):
-        # Will go into the instruction screen once the player presses the right arrow key
-        if (symbol == arcade.key.RIGHT):
+        # Will go into the instruction screen once the player presses 'I'.
+        if (symbol == arcade.key.I):
             instruction_view = InstructionView()
             self.window.show_view(instruction_view)    
-        # Will go to main gameplay once player presses 'P'
+        # Will go to main gameplay once the player presses 'P'
         elif (symbol == arcade.key.P):
             arcade.play_sound(self.yum)
             test_view = main.GameView()
