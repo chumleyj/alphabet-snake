@@ -22,7 +22,7 @@ This software was developed using the following programming languages and librar
 # Collaborators
 
 * Ryan Taniguchi - ryan.taniguchi@protonmail.com
-* Avery Crowson
+* Avery Crowson -  crowson.avery@gmail.com
 * Jeffrey Chumley - chumleyj@gmail.com
 * Brad Howard - howardbrad33@gmail.com
 * Erik Alcala - erikalcala06@gmail.com
