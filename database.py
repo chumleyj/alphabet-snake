@@ -1,15 +1,21 @@
 import sqlite3
 import random
 
+"""
+Function: create_database
+Description: Creates a the sqlite database for the words,
+and then inserts the words into the database with word_id.
 
+Function Variables:
+    mycursor: stores the connection to the database.
+    insert_words: stores the word_ids and words that will be
+                  inserted into the database.
+"""
 def create_database():
     conn = sqlite3.connect('words.db')
 
     mycursor = conn.cursor()
 
-    mycursor.execute("DROP TABLE IF EXISTS easy_words")
-    mycursor.execute("DROP TABLE IF EXISTS normal_words")
-    mycursor.execute("DROP TABLE IF EXISTS hard_words")
     mycursor.execute("DROP TABLE IF EXISTS game_words")
 
     mycursor.execute("""CREATE TABLE IF NOT EXISTS game_words (
@@ -37,6 +43,18 @@ def create_database():
     conn.close()
 
 
+"""
+Function: get_words
+Description: Selects the words from the database and stores
+             them in a list of tuples.
+
+Function Variables:
+    mycursor: stores the connection to the database.
+    words_list: stores the word_ids and words that are fetched
+                from the database.
+"""
+
+
 def get_words():
     conn = sqlite3.connect('words.db')
 
@@ -47,6 +65,23 @@ def get_words():
     words_list = mycursor.fetchall()
 
     return words_list
+
+"""
+Function: select_word
+Description: Selects a random word from the list of words
+             that were fetched from the database.
+
+Function Variables:
+    game_words_list: stores the word_ids and words that are
+                     fetched from the database.
+    words_id: stores the random integer that is used to select
+              the word from word_ids.
+    game_words: stores the word_ids and words that were fetched
+                from the database in a dictionary to easily compare
+                the word_ids.
+    selected_word: stores the word that has the id from the randomly
+                   selected word_id priorly.
+"""
 
 
 def select_word():
@@ -59,6 +94,20 @@ def select_word():
     selected_word = game_words[word_id]
 
     return selected_word
+
+
+"""
+
+Function: total_words
+Description: Is used to know the number of words that are stored in
+             the database.
+
+Function Variables:
+    game_words_list: Stores the word_ids and words that are
+                     fetched from the database. Is used with
+                     the len() function to know the length to
+                     determine the length of the list.
+"""
 
 
 def total_words():
