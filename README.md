@@ -1,9 +1,5 @@
 # Overview
 
-{Important!  Do not say in this section that this is college assignment.}
-needs pip install mysql-connector-python
-
-{Provide a description of your team project.  Describe how to use the software.}
 This project is a version of the classic game Snake that was developed using the Python programming language. Users will be given an image of a word, and will seek to have the snake eat the appropriate letters for that word in order. 
 
 If the snake eats the wrong letters, the snake will lose a life. If the snake loses all five of its lives, the game is over. The game will also end if the snake runs into a wall or if the snake runs into itself.
